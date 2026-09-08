@@ -79,31 +79,36 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0e1628] border border-slate-800 rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div className="bg-[#0b1220] border border-white/[0.1] rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <Download className="w-5 h-5 text-sky-400" />
-            <h3 className="font-bold text-base text-white">Export Architecture Report</h3>
+        <div className="flex items-center justify-between p-4 px-6 border-b border-white/[0.08] bg-[#070b16]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center">
+              <Download className="w-4 h-4 text-sky-400" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm text-white">Export Architecture Report</h3>
+              <p className="text-[11px] text-slate-400">Export for documentation, team PRs, or architecture reviews</p>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Format Selector Bar */}
-        <div className="flex items-center justify-between px-4 py-2 bg-slate-900/60 border-b border-slate-800 text-xs">
+        <div className="flex items-center justify-between px-6 py-3 bg-[#0d1424]/60 border-b border-white/[0.06] text-xs">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setFormat('markdown')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md transition ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition font-medium ${
                 format === 'markdown'
-                  ? 'bg-sky-500 text-white font-medium shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-sky-500 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white bg-white/[0.04]'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -111,10 +116,10 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
             </button>
             <button
               onClick={() => setFormat('json')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md transition ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition font-medium ${
                 format === 'json'
-                  ? 'bg-sky-500 text-white font-medium shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-sky-500 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white bg-white/[0.04]'
               }`}
             >
               <Code2 className="w-3.5 h-3.5" />
@@ -125,14 +130,14 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-lg border border-slate-700 transition"
+              className="flex items-center gap-1.5 text-xs bg-white/[0.06] hover:bg-white/[0.1] text-slate-200 px-3 py-1.5 rounded-lg border border-white/[0.08] transition"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
             <button
               onClick={handleDownload}
-              className="flex items-center gap-1 text-xs bg-sky-500 hover:bg-sky-600 text-white px-3 py-1 rounded-lg font-medium transition"
+              className="flex items-center gap-1.5 text-xs bg-sky-500 hover:bg-sky-600 text-white px-3.5 py-1.5 rounded-lg font-semibold transition shadow-sm"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Download File</span>
@@ -140,8 +145,8 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
           </div>
         </div>
 
-        {/* Content Viewer */}
-        <div className="p-4 overflow-y-auto flex-1 font-mono text-xs text-slate-300 bg-slate-950">
+        {/* Content Preview */}
+        <div className="p-5 overflow-y-auto flex-1 font-mono text-xs text-slate-300 bg-[#060913]">
           <pre className="whitespace-pre-wrap leading-relaxed">{content}</pre>
         </div>
       </div>
