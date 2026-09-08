@@ -4,8 +4,8 @@
 
 @layer base {
   body {
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: #051329;
+    color: #f1f5f9;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -13,60 +13,92 @@
   }
 }
 
-/* Luminous soft ambient background */
-.award-bg {
-  background-color: #f8fafc;
+/* Red Bull Racing Atmosphere */
+.rb-bg {
+  background-color: #051329;
   background-image:
-    radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.07) 0px, transparent 45%),
-    radial-gradient(at 85% 15%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.04) 0px, transparent 60%),
-    radial-gradient(at 80% 85%, rgba(244, 63, 94, 0.05) 0px, transparent 45%);
+    radial-gradient(at 10% 10%, rgba(224, 0, 52, 0.16) 0px, transparent 45%),
+    radial-gradient(at 90% 15%, rgba(255, 209, 0, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 60%, rgba(0, 102, 204, 0.1) 0px, transparent 60%),
+    radial-gradient(at 85% 90%, rgba(224, 0, 52, 0.12) 0px, transparent 50%);
   background-attachment: fixed;
 }
 
-/* Subtle micro-dot grid */
-.dot-grid {
-  background-image: radial-gradient(rgba(148, 163, 184, 0.25) 1px, transparent 1px);
-  background-size: 24px 24px;
+/* Circuit telemetry grid overlay */
+.circuit-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
-/* Clean Crisp Glassmorphism */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.88);
+/* Red Bull Racing Card Widget */
+.rb-widget {
+  background: linear-gradient(135deg, rgba(9, 28, 56, 0.9) 0%, rgba(7, 20, 42, 0.95) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
-}
-
-.glass-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
-.glass-card:hover {
-  border-color: #93c5fd;
+.rb-widget::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #e00034 0%, #ffd100 50%, transparent 100%);
+  opacity: 0.8;
+  border-radius: 9999px 9999px 0 0;
+}
+
+.rb-widget:hover {
+  border-color: rgba(224, 0, 52, 0.4);
   transform: translateY(-2px);
-  box-shadow: 0 16px 32px -8px rgba(37, 99, 235, 0.12), 0 4px 8px -2px rgba(37, 99, 235, 0.04);
+  box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.8), 0 0 25px -5px rgba(224, 0, 52, 0.25);
 }
 
-/* Smooth customized scrollbar */
+/* Red Bull Racing speed stripes */
+.rb-racing-badge {
+  transform: skewX(-10deg);
+  display: inline-flex;
+  align-items: center;
+}
+
+.rb-racing-badge > * {
+  transform: skewX(10deg);
+}
+
+/* Telemetry Cable Pulse Animation */
+@keyframes raceFlow {
+  0% { stroke-dashoffset: 80; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.rb-flow-pulse {
+  stroke-dasharray: 6 10;
+  animation: raceFlow 1.6s linear infinite;
+}
+
+/* Sleek Red Bull scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #051329;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #162f59;
   border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #e00034;
 }

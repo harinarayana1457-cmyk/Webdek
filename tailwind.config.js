@@ -7,30 +7,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        studio: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617',
-          surface: '#ffffff',
-          card: 'rgba(255, 255, 255, 0.92)',
-          border: '#e2e8f0',
-        },
-        brand: {
-          blue: '#2563eb',
-          indigo: '#4f46e5',
-          cyan: '#0284c7',
-          emerald: '#059669',
-          amber: '#d97706',
-          rose: '#e11d48',
-          purple: '#7c3aed',
+        rb: {
+          dark: '#030b17',
+          navy: '#051329',
+          surface: '#091c38',
+          card: '#0e2447',
+          border: 'rgba(255, 255, 255, 0.1)',
+          borderActive: '#e00034',
+          red: '#e00034',
+          crimson: '#ff003c',
+          yellow: '#ffd100',
+          gold: '#ffb800',
+          blue: '#0066cc',
+          sky: '#00a3ff',
+          silver: '#e2e8f0',
+          muted: '#8da2b8',
         }
       },
       fontFamily: {
@@ -38,20 +29,18 @@ export default {
         mono: ['"JetBrains Mono"', 'Fira Code', 'Consolas', 'monospace'],
       },
       boxShadow: {
-        'soft-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
-        'soft-md': '0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04)',
-        'soft-lg': '0 10px 30px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03)',
-        'soft-xl': '0 20px 40px -8px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.04)',
-        'glow-blue': '0 0 20px -3px rgba(37, 99, 235, 0.25)',
-        'glow-indigo': '0 0 20px -3px rgba(79, 70, 229, 0.25)',
+        'rb-red': '0 0 25px -4px rgba(224, 0, 52, 0.45)',
+        'rb-yellow': '0 0 25px -4px rgba(255, 209, 0, 0.4)',
+        'rb-card': '0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.1)',
+        'rb-glow': '0 0 35px -5px rgba(224, 0, 52, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.15)',
       },
       animation: {
-        'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
+        'race-pulse': 'racePulse 2s ease-in-out infinite',
       },
       keyframes: {
-        pulseSubtle: {
-          '0%, 100%': { opacity: '0.6' },
-          '50%': { opacity: '1' },
+        racePulse: {
+          '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+          '50%': { opacity: '1', transform: 'scale(1.05)' },
         }
       }
     },

@@ -103,7 +103,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-sans award-bg selection:bg-blue-500/20 selection:text-blue-900">
+    <div className="min-h-screen rb-bg text-slate-100 flex flex-col font-sans selection:bg-[#e00034]/30 selection:text-white circuit-grid">
       {/* Top Navbar */}
       <Navbar
         currentPresetId={currentPresetId}
@@ -122,9 +122,9 @@ export function App() {
       {/* Main Container */}
       <main className="flex-1 flex flex-col">
         {isScanning && !analysisResult ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-16 text-slate-500">
-            <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-3" />
-            <p className="text-sm font-mono font-medium">Scanning AST manifests & classifying architecture...</p>
+          <div className="flex-1 flex flex-col items-center justify-center p-16 text-slate-400">
+            <Loader2 className="w-9 h-9 text-[#e00034] animate-spin mb-3" />
+            <p className="text-sm font-mono font-bold text-slate-200">Scanning telemetry manifests & classifying aerodynamic architecture...</p>
           </div>
         ) : analysisResult ? (
           <>

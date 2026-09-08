@@ -3,7 +3,6 @@ import {
   Cpu,
   Boxes,
   Palette,
-  Sparkles,
   Layers,
   ArrowRight,
   Database,
@@ -11,7 +10,8 @@ import {
   ShieldCheck,
   Zap,
   GitBranch,
-  Radio
+  Radio,
+  Flame
 } from 'lucide-react';
 import { ProjectAnalysisResult } from '../../engine/types';
 
@@ -35,118 +35,124 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
   const flowSteps = architecture.dataFlowSummary.split('->').map((s) => s.trim());
 
   return (
-    <div className="border-b border-slate-200/90 bg-gradient-to-b from-white via-slate-50/50 to-slate-100/50 px-4 lg:px-8 py-5">
+    <div className="border-b border-white/[0.08] bg-gradient-to-b from-[#051329] via-[#040f21] to-[#030b17] px-4 lg:px-8 py-5 relative">
       <div className="max-w-[1780px] mx-auto space-y-4">
-        {/* Top Tech Stack Capsules */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
-          <div className="flex flex-wrap items-center gap-2">
+        {/* Top Power-Unit Capsules */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+          <div className="flex flex-wrap items-center gap-2.5">
             {/* Framework */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50/90 border border-blue-200 text-xs text-blue-900 font-medium shadow-soft-sm hover:border-blue-400 transition-colors">
-              <Boxes className="w-3.5 h-3.5 text-blue-600" />
-              <span className="text-slate-500 text-[11px] font-sans">Framework:</span>
-              <span className="font-bold text-slate-900 tracking-tight font-mono">{primaryFramework}</span>
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group">
+              <Boxes className="w-4 h-4 text-[#ffd100] group-hover:scale-110 transition-transform" />
+              <span className="text-slate-400 text-[11px] font-sans">Framework:</span>
+              <span className="font-extrabold text-white tracking-tight font-mono">{primaryFramework}</span>
             </div>
 
             {/* Runtime */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50/90 border border-emerald-200 text-xs text-emerald-900 font-medium shadow-soft-sm hover:border-emerald-400 transition-colors">
-              <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-              <span className="text-slate-500 text-[11px] font-sans">Runtime:</span>
-              <span className="font-bold text-slate-900 tracking-tight font-mono">{primaryRuntime}</span>
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group">
+              <Cpu className="w-4 h-4 text-[#00a3ff] group-hover:scale-110 transition-transform" />
+              <span className="text-slate-400 text-[11px] font-sans">Runtime:</span>
+              <span className="font-extrabold text-white tracking-tight font-mono">{primaryRuntime}</span>
             </div>
 
             {/* Styling */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-50/90 border border-purple-200 text-xs text-purple-900 font-medium shadow-soft-sm hover:border-purple-400 transition-colors">
-              <Palette className="w-3.5 h-3.5 text-purple-600" />
-              <span className="text-slate-500 text-[11px] font-sans">Styling:</span>
-              <span className="font-bold text-slate-900 tracking-tight font-mono">{stylingEngine}</span>
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group">
+              <Palette className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+              <span className="text-slate-400 text-[11px] font-sans">Styling:</span>
+              <span className="font-extrabold text-white tracking-tight font-mono">{stylingEngine}</span>
             </div>
 
             {/* State Management */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50/90 border border-amber-200 text-xs text-amber-900 font-medium shadow-soft-sm hover:border-amber-400 transition-colors">
-              <Database className="w-3.5 h-3.5 text-amber-600" />
-              <span className="text-slate-500 text-[11px] font-sans">State:</span>
-              <span className="font-bold text-slate-900 tracking-tight font-mono">{stateLayer}</span>
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group">
+              <Database className="w-4 h-4 text-[#ffd100] group-hover:scale-110 transition-transform" />
+              <span className="text-slate-400 text-[11px] font-sans">State:</span>
+              <span className="font-extrabold text-white tracking-tight font-mono">{stateLayer}</span>
             </div>
 
             {/* AI Layer */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-rose-50/90 border border-rose-200 text-xs text-rose-900 font-medium shadow-soft-sm hover:border-rose-400 transition-colors">
-              <Sparkles className="w-3.5 h-3.5 text-rose-600" />
-              <span className="text-slate-500 text-[11px] font-sans">AI Layer:</span>
-              <span className="font-bold text-slate-900 tracking-tight font-mono">{aiLayer}</span>
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-[#e00034]/40 hover:border-[#e00034] text-xs font-semibold text-white shadow-sm transition-all group">
+              <Flame className="w-4 h-4 text-[#e00034] group-hover:scale-110 transition-transform" />
+              <span className="text-slate-400 text-[11px] font-sans">AI Layer:</span>
+              <span className="font-extrabold text-[#ffd100] tracking-tight font-mono">{aiLayer}</span>
             </div>
           </div>
 
-          {/* Micro HUD Metrics */}
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-600">
-            <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-soft-sm">
-              <FileCode2 className="w-3.5 h-3.5 text-blue-600" />
-              <span>{manifestsFound.length} Configs Scanned</span>
+          {/* Telemetry Micro HUD */}
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
+            <div className="flex items-center gap-1.5 bg-[#091d3d] px-3 py-1.5 rounded-xl border border-white/[0.08]">
+              <FileCode2 className="w-3.5 h-3.5 text-[#ffd100]" />
+              <span>{manifestsFound.length} Configs Verified</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-soft-sm">
-              <Zap className="w-3.5 h-3.5 text-amber-500" />
-              <span className="text-slate-900 font-bold">{dependencies.length}</span>
-              <span>Dependencies</span>
+            <div className="flex items-center gap-1.5 bg-[#091d3d] px-3 py-1.5 rounded-xl border border-white/[0.08]">
+              <Zap className="w-3.5 h-3.5 text-[#e00034]" />
+              <span className="text-white font-extrabold">{dependencies.length}</span>
+              <span>Power Components</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-soft-sm">
-              <Radio className="w-3 h-3 text-emerald-600 animate-pulse" />
-              <span className="text-emerald-700 font-semibold">Parser Synchronized</span>
+            <div className="flex items-center gap-1.5 bg-[#091d3d] px-3 py-1.5 rounded-xl border border-white/[0.08]">
+              <Radio className="w-3 h-3 text-[#ffd100] animate-pulse" />
+              <span className="text-[#ffd100] font-bold">Pit Wall Online</span>
             </div>
           </div>
         </div>
 
-        {/* Bento Hero Cards */}
+        {/* Bento Hero Telemetry Widgets */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Main Architecture Card */}
-          <div className="lg:col-span-8 p-6 rounded-3xl bg-white border border-slate-200/90 shadow-soft-md relative overflow-hidden flex flex-col justify-between group">
+          {/* Main Chassis Architecture Card */}
+          <div className="lg:col-span-8 p-6 rounded-3xl rb-widget flex flex-col justify-between group overflow-hidden">
+            {/* Background Red Bull sun glow */}
+            <div className="absolute top-0 right-0 w-80 h-40 bg-gradient-to-bl from-[#e00034]/15 via-[#ffd100]/10 to-transparent blur-3xl pointer-events-none" />
+
             <div>
               {/* Pattern Header */}
               <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shadow-sm">
-                    <Layers className="w-5 h-5 text-blue-600" />
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#e00034] to-[#ffd100] p-[2px] shadow-rb-red">
+                    <div className="w-full h-full bg-[#051329] rounded-[14px] flex items-center justify-center">
+                      <Layers className="w-5 h-5 text-[#ffd100]" />
+                    </div>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-mono tracking-widest text-blue-600 font-bold block">
-                      ARCHITECTURAL PATTERN SIGNATURE
+                    <span className="text-[10px] uppercase font-mono tracking-widest text-[#ffd100] font-extrabold block">
+                      POWER UNIT & CHASSIS SPECIFICATION
                     </span>
-                    <h2 className="text-xl font-black text-slate-900 tracking-tight font-sans">
+                    <h2 className="text-xl font-black text-white tracking-tight font-sans italic">
                       {architecture.pattern}
                     </h2>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1.5 shadow-soft-sm">
-                    <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-                    {architecture.confidence}% Confidence Match
+                  <span className="rb-racing-badge text-xs font-mono font-black px-3.5 py-1 rounded bg-[#e00034] text-white shadow-rb-red flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>{architecture.confidence}% TELEMETRY MATCH</span>
                   </span>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-600 leading-relaxed max-w-4xl font-normal mt-1">
+              <p className="text-xs text-slate-300 leading-relaxed max-w-4xl font-normal mt-1">
                 {architecture.summary}
               </p>
             </div>
 
-            {/* Pipeline Step Tracker */}
-            <div className="mt-5 pt-4 border-t border-slate-100">
+            {/* Circuit Telemetry Pipeline Track */}
+            <div className="mt-6 pt-4 border-t border-white/[0.08]">
               <div className="flex items-center justify-between mb-2.5">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold flex items-center gap-1.5">
-                  <GitBranch className="w-3.5 h-3.5 text-blue-600" />
-                  Architectural Runtime Data Flow
+                <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
+                  <GitBranch className="w-3.5 h-3.5 text-[#ffd100]" />
+                  Telemetry Flow Pipeline (Lap Sectors)
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">Unidirectional Reactive Stream</span>
+                <span className="text-[10px] font-mono text-slate-400">High-Speed Execution Sequence</span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto py-1">
+              <div className="flex flex-wrap items-center gap-2 overflow-x-auto py-1">
                 {flowSteps.map((step, idx) => (
                   <React.Fragment key={idx}>
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] font-mono text-slate-800 shadow-soft-sm hover:border-blue-400 hover:text-blue-700 transition-all cursor-default">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                      <span className="font-semibold">{step}</span>
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#06142a] border border-white/[0.1] text-[11px] font-mono text-slate-200 shadow-inner hover:border-[#ffd100] hover:text-white transition-all cursor-default group/sector">
+                      <span className="w-2 h-2 rounded-full bg-[#e00034] group-hover/sector:bg-[#ffd100] transition-colors shadow-rb-red" />
+                      <span className="font-bold">Sector {idx + 1}:</span>
+                      <span>{step}</span>
                     </div>
                     {idx < flowSteps.length - 1 && (
-                      <ArrowRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                      <ArrowRight className="w-3.5 h-3.5 text-[#ffd100]/60 shrink-0" />
                     )}
                   </React.Fragment>
                 ))}
@@ -154,28 +160,28 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
             </div>
           </div>
 
-          {/* AI Readiness & Lifecycle Bento Card */}
-          <div className="lg:col-span-4 p-6 rounded-3xl bg-white border border-slate-200/90 shadow-soft-md flex flex-col justify-between">
-            {/* Top Score Section */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          {/* Pit Wall AI Speedometer Dial Widget */}
+          <div className="lg:col-span-4 p-6 rounded-3xl rb-widget flex flex-col justify-between">
+            {/* Speedometer Header */}
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
               <div>
-                <span className="text-[10px] uppercase font-mono tracking-widest text-amber-600 font-bold block">
-                  AI AGENT READINESS HUD
+                <span className="text-[10px] uppercase font-mono tracking-widest text-[#ffd100] font-black block">
+                  PIT WALL AI HUD
                 </span>
-                <h3 className="text-sm font-bold text-slate-900 tracking-tight mt-0.5">
-                  Alignment & Context Index
+                <h3 className="text-sm font-extrabold text-white tracking-tight mt-0.5 italic">
+                  Agent Telemetry & Alignment
                 </h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">Cursor rules, MCP & instructions</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Rules, MCP telemetry & directives</p>
               </div>
 
-              {/* Radial Gauge */}
+              {/* Speedometer Dial */}
               <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
                 <svg className="w-16 h-16 transform -rotate-90">
                   <circle
                     cx="32"
                     cy="32"
                     r="26"
-                    className="text-slate-100"
+                    className="text-white/[0.08]"
                     strokeWidth="5"
                     stroke="currentColor"
                     fill="transparent"
@@ -184,45 +190,48 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
                     cx="32"
                     cy="32"
                     r="26"
-                    stroke={aiConfig.readinessScore >= 80 ? '#059669' : aiConfig.readinessScore >= 50 ? '#2563eb' : '#e11d48'}
+                    stroke={aiConfig.readinessScore >= 80 ? '#e00034' : '#ffd100'}
                     strokeWidth="5"
                     strokeDasharray={2 * Math.PI * 26}
                     strokeDashoffset={2 * Math.PI * 26 - (aiConfig.readinessScore / 100) * (2 * Math.PI * 26)}
                     strokeLinecap="round"
                     fill="transparent"
-                    className="transition-all duration-1000 ease-out"
+                    className="transition-all duration-1000 ease-out shadow-rb-red"
                   />
                 </svg>
-                <span className="absolute font-mono text-xs font-black text-slate-900">
-                  {aiConfig.readinessScore}%
-                </span>
+                <div className="absolute flex flex-col items-center justify-center">
+                  <span className="font-mono text-xs font-black text-white">
+                    {aiConfig.readinessScore}%
+                  </span>
+                  <span className="text-[8px] font-mono text-[#ffd100] uppercase font-bold">RPM</span>
+                </div>
               </div>
             </div>
 
-            {/* Lifecycle Stages */}
+            {/* Circuit Phases */}
             <div className="my-3.5 space-y-2">
-              <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 mb-1">
-                <span>Execution Phases</span>
-                <span className="text-blue-600 font-medium">Deterministic Order</span>
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1">
+                <span>Execution Checkpoints</span>
+                <span className="text-[#ffd100] font-bold">Optimal Path</span>
               </div>
 
               {architecture.lifecycleSequence.slice(0, 3).map((step, idx) => (
                 <div key={idx} className="flex items-start gap-2.5 text-xs">
-                  <span className="text-[10px] font-mono font-bold text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200 shrink-0 mt-0.5">
-                    0{idx + 1}
+                  <span className="text-[10px] font-mono font-extrabold text-white bg-[#e00034] px-1.5 py-0.2 rounded shrink-0 mt-0.5 shadow-sm">
+                    P{idx + 1}
                   </span>
-                  <span className="text-slate-700 text-[11px] leading-tight truncate">
+                  <span className="text-slate-300 text-[11px] leading-tight truncate">
                     {step.replace(/^\d+\.\s*/, '')}
                   </span>
                 </div>
               ))}
             </div>
 
-            {/* Entry Points Footer */}
+            {/* Paddock Boot Entry */}
             {architecture.entryPoints.length > 0 && (
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>Boot Entry:</span>
-                <span className="text-blue-700 font-semibold truncate max-w-[180px] bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
+              <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>Paddock Entry:</span>
+                <span className="text-[#ffd100] font-bold truncate max-w-[180px] bg-[#06142a] px-2.5 py-1 rounded-lg border border-white/[0.1]">
                   {architecture.entryPoints[0]}
                 </span>
               </div>
