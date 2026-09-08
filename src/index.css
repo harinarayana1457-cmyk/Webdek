@@ -3,75 +3,83 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --bg-primary: #060913;
-    --bg-surface: #0b1120;
-    --bg-card: rgba(15, 23, 42, 0.75);
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-glow: rgba(56, 189, 248, 0.3);
-  }
-
   body {
-    background-color: var(--bg-primary);
-    color: #f1f5f9;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #030712;
+    color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 }
 
-/* Cyber mesh background */
-.cyber-grid {
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
+/* Atmospheric dark background with multi-point radial aurora glows */
+.award-bg {
+  background-color: #030712;
+  background-image:
+    radial-gradient(at 10% 10%, rgba(0, 240, 255, 0.08) 0px, transparent 50%),
+    radial-gradient(at 90% 15%, rgba(139, 92, 246, 0.12) 0px, transparent 55%),
+    radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.04) 0px, transparent 65%),
+    radial-gradient(at 80% 90%, rgba(244, 63, 94, 0.06) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
-.radial-glow {
-  background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.05) 45%, transparent 70%);
+/* Micro-dot grid overlay */
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
+/* Refined Glassmorphism */
 .glass-panel {
-  background: rgba(13, 19, 36, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 14, 28, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 .glass-card {
-  background: rgba(16, 24, 45, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(11, 18, 38, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(15, 24, 50, 0.85);
+  border-color: rgba(0, 240, 255, 0.35);
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5), 0 0 20px -4px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px -4px rgba(0, 240, 255, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Flow line pulse animation */
-@keyframes dashFlow {
-  from {
-    stroke-dashoffset: 40;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
+/* Shimmer border animation */
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
 }
 
-.animate-dash-flow {
-  stroke-dasharray: 6, 6;
-  animation: dashFlow 1.5s linear infinite;
+.border-glow-animate {
+  animation: borderGlow 4s ease-in-out infinite;
 }
 
-/* Custom sleek scrollbar */
+/* Cable Flow Pulse Animation */
+@keyframes pulseLine {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.cable-pulse {
+  stroke-dasharray: 8 12;
+  animation: pulseLine 2s linear infinite;
+}
+
+/* Sleek customized scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -79,10 +87,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(56, 189, 248, 0.4);
+  background: rgba(0, 240, 255, 0.5);
 }

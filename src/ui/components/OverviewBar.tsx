@@ -10,7 +10,8 @@ import {
   FileCode2,
   ShieldCheck,
   Zap,
-  Activity
+  GitBranch,
+  Radio
 } from 'lucide-react';
 import { ProjectAnalysisResult } from '../../engine/types';
 
@@ -34,114 +35,121 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
   const flowSteps = architecture.dataFlowSummary.split('->').map((s) => s.trim());
 
   return (
-    <div className="border-b border-white/[0.08] bg-gradient-to-b from-[#090e1e] to-[#070b16] px-4 lg:px-6 py-4">
-      <div className="max-w-[1700px] mx-auto space-y-4">
-        {/* Top Tech Stack Pills Row */}
+    <div className="border-b border-white/[0.08] bg-gradient-to-b from-[#050917]/90 via-[#040713]/95 to-[#030712] px-4 lg:px-8 py-5">
+      <div className="max-w-[1780px] mx-auto space-y-4">
+        {/* Top Tech Stack Capsules */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Framework Pill */}
-            <div className="group flex items-center gap-2 px-3 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/20 hover:border-sky-500/40 text-xs font-medium text-sky-300 transition-all shadow-sm">
-              <Boxes className="w-3.5 h-3.5 text-sky-400 group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 font-normal">Framework:</span>
-              <span className="font-semibold text-white tracking-tight">{primaryFramework}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Framework */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-950/30 border border-cyan-500/25 text-xs text-cyan-300 font-medium shadow-sm hover:border-cyan-400/50 transition-colors">
+              <Boxes className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="text-slate-400 text-[11px] font-sans">Framework:</span>
+              <span className="font-bold text-white tracking-tight font-mono">{primaryFramework}</span>
             </div>
 
-            {/* Runtime Pill */}
-            <div className="group flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 hover:border-emerald-500/40 text-xs font-medium text-emerald-300 transition-all shadow-sm">
-              <Cpu className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 font-normal">Runtime:</span>
-              <span className="font-semibold text-white tracking-tight">{primaryRuntime}</span>
+            {/* Runtime */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-950/30 border border-emerald-500/25 text-xs text-emerald-300 font-medium shadow-sm hover:border-emerald-400/50 transition-colors">
+              <Cpu className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="text-slate-400 text-[11px] font-sans">Runtime:</span>
+              <span className="font-bold text-white tracking-tight font-mono">{primaryRuntime}</span>
             </div>
 
-            {/* Styling Pill */}
-            <div className="group flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 text-xs font-medium text-purple-300 transition-all shadow-sm">
-              <Palette className="w-3.5 h-3.5 text-purple-400 group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 font-normal">Styling:</span>
-              <span className="font-semibold text-white tracking-tight">{stylingEngine}</span>
+            {/* Styling */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-950/30 border border-purple-500/25 text-xs text-purple-300 font-medium shadow-sm hover:border-purple-400/50 transition-colors">
+              <Palette className="w-3.5 h-3.5 text-purple-400" />
+              <span className="text-slate-400 text-[11px] font-sans">Styling:</span>
+              <span className="font-bold text-white tracking-tight font-mono">{stylingEngine}</span>
             </div>
 
-            {/* State Layer Pill */}
-            <div className="group flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 hover:border-amber-500/40 text-xs font-medium text-amber-300 transition-all shadow-sm">
-              <Database className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 font-normal">State:</span>
-              <span className="font-semibold text-white tracking-tight">{stateLayer}</span>
+            {/* State Management */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-950/30 border border-amber-500/25 text-xs text-amber-300 font-medium shadow-sm hover:border-amber-400/50 transition-colors">
+              <Database className="w-3.5 h-3.5 text-amber-400" />
+              <span className="text-slate-400 text-[11px] font-sans">State:</span>
+              <span className="font-bold text-white tracking-tight font-mono">{stateLayer}</span>
             </div>
 
-            {/* AI Layer Pill */}
-            <div className="group flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/20 hover:border-rose-500/40 text-xs font-medium text-rose-300 transition-all shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-rose-400 group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 font-normal">AI Layer:</span>
-              <span className="font-semibold text-white tracking-tight">{aiLayer}</span>
+            {/* AI Layer */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-rose-950/30 border border-rose-500/25 text-xs text-rose-300 font-medium shadow-sm hover:border-rose-400/50 transition-colors">
+              <Sparkles className="w-3.5 h-3.5 text-rose-400" />
+              <span className="text-slate-400 text-[11px] font-sans">AI Layer:</span>
+              <span className="font-bold text-white tracking-tight font-mono">{aiLayer}</span>
             </div>
           </div>
 
-          {/* Quick Metrics */}
-          <div className="flex items-center gap-3 text-xs font-mono">
-            <div className="flex items-center gap-1.5 bg-white/[0.04] px-2.5 py-1 rounded-lg border border-white/[0.06]">
-              <FileCode2 className="w-3.5 h-3.5 text-slate-400" />
-              <span className="text-slate-400">{manifestsFound.length} Configs</span>
+          {/* Micro HUD Metrics */}
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+            <div className="flex items-center gap-1.5 bg-[#091124] px-3 py-1.5 rounded-xl border border-white/[0.08]">
+              <FileCode2 className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{manifestsFound.length} Configs Scanned</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-white/[0.04] px-2.5 py-1 rounded-lg border border-white/[0.06]">
-              <Zap className="w-3.5 h-3.5 text-sky-400" />
-              <span className="text-white font-semibold">{dependencies.length}</span>
-              <span className="text-slate-400">Libraries</span>
+            <div className="flex items-center gap-1.5 bg-[#091124] px-3 py-1.5 rounded-xl border border-white/[0.08]">
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <span className="text-white font-bold">{dependencies.length}</span>
+              <span>Dependencies</span>
             </div>
-            <div
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border font-bold ${
-                aiConfig.readinessScore >= 80
-                  ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                  : aiConfig.readinessScore >= 50
-                  ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
-                  : 'bg-rose-500/15 text-rose-400 border-rose-500/30'
-              }`}
-            >
-              <Activity className="w-3 h-3" />
-              <span>AI Readiness: {aiConfig.readinessScore}%</span>
+            <div className="flex items-center gap-1.5 bg-[#091124] px-3 py-1.5 rounded-xl border border-white/[0.08]">
+              <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
+              <span className="text-emerald-400 font-semibold">Parser Synchronized</span>
             </div>
           </div>
         </div>
 
-        {/* Hero Architectural Card */}
+        {/* Bento Hero Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Main Pattern Description */}
-          <div className="lg:col-span-8 p-4 rounded-xl bg-[#0e1628]/90 border border-white/[0.08] shadow-sm relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 right-0 w-80 h-40 bg-sky-500/5 blur-3xl pointer-events-none" />
+          {/* Main Architecture Card */}
+          <div className="lg:col-span-8 p-5 rounded-2xl bg-gradient-to-br from-[#091126]/90 via-[#070d1e]/90 to-[#040814]/90 border border-white/[0.1] shadow-2xl relative overflow-hidden flex flex-col justify-between group">
+            {/* Top right ambient glow */}
+            <div className="absolute top-0 right-0 w-96 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-cyan-500/15 transition-all duration-500" />
 
             <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center">
-                    <Layers className="w-4 h-4 text-sky-400" />
+              {/* Pattern Header */}
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-2.5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-indigo-500/20 border border-cyan-500/30 flex items-center justify-center shadow-glow-cyan">
+                    <Layers className="w-5 h-5 text-cyan-400" />
                   </div>
-                  <h2 className="text-base font-bold text-white tracking-tight">{architecture.pattern}</h2>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-semibold border border-sky-500/30">
-                    {architecture.confidence}% Pattern Match
-                  </span>
+                  <div>
+                    <span className="text-[10px] uppercase font-mono tracking-widest text-cyan-400 font-bold block">
+                      ARCHITECTURAL PATTERN SIGNATURE
+                    </span>
+                    <h2 className="text-lg font-black text-white tracking-tight font-sans">
+                      {architecture.pattern}
+                    </h2>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-1 text-[11px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Deterministic AST Classifier</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5 shadow-sm">
+                    <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                    {architecture.confidence}% Confidence Match
+                  </span>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed max-w-4xl">{architecture.summary}</p>
+              <p className="text-xs text-slate-300 leading-relaxed max-w-4xl font-normal mt-1">
+                {architecture.summary}
+              </p>
             </div>
 
-            {/* Interactive Data Flow Pipeline Chips */}
-            <div className="mt-4 pt-3 border-t border-white/[0.06]">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block mb-2">
-                Active Architecture Pipeline
-              </span>
+            {/* Pipeline Step Tracker */}
+            <div className="mt-5 pt-3.5 border-t border-white/[0.08]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
+                  <GitBranch className="w-3 h-3 text-cyan-400" />
+                  Architectural Runtime Data Flow
+                </span>
+                <span className="text-[10px] font-mono text-slate-500">Unidirectional Reactive Stream</span>
+              </div>
+
               <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto py-1">
                 {flowSteps.map((step, idx) => (
                   <React.Fragment key={idx}>
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#070b16] border border-white/[0.08] text-[11px] font-mono text-sky-300 shadow-sm whitespace-nowrap hover:border-sky-500/40 transition-colors">
-                      <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
-                      <span>{step}</span>
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#060b18] border border-white/[0.09] text-[11px] font-mono text-slate-200 shadow-inner hover:border-cyan-500/50 hover:text-cyan-300 transition-all cursor-default">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-glow-cyan" />
+                      <span className="font-semibold">{step}</span>
                     </div>
                     {idx < flowSteps.length - 1 && (
-                      <ArrowRight className="w-3 h-3 text-slate-500 shrink-0" />
+                      <ArrowRight className="w-3.5 h-3.5 text-cyan-500/50 shrink-0" />
                     )}
                   </React.Fragment>
                 ))}
@@ -149,36 +157,76 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
             </div>
           </div>
 
-          {/* Execution Lifecycle Timeline */}
-          <div className="lg:col-span-4 p-4 rounded-xl bg-[#0e1628]/90 border border-white/[0.08] shadow-sm flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-white/[0.06]">
-                <span className="text-xs font-bold text-white font-mono flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Execution Lifecycle
+          {/* AI Readiness & Lifecycle Bento Card */}
+          <div className="lg:col-span-4 p-5 rounded-2xl bg-gradient-to-br from-[#0c142c]/90 via-[#080e22]/90 to-[#050918]/90 border border-white/[0.1] shadow-2xl flex flex-col justify-between">
+            {/* Top Score Section */}
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3.5">
+              <div>
+                <span className="text-[10px] uppercase font-mono tracking-widest text-amber-400 font-bold block">
+                  AI AGENT READINESS HUD
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">Entry to Hydration</span>
+                <h3 className="text-sm font-bold text-white tracking-tight mt-0.5">
+                  Alignment & Context Index
+                </h3>
+                <p className="text-[11px] text-slate-400 mt-0.5">Cursor rules, MCP & instructions</p>
               </div>
 
-              <div className="space-y-2">
-                {architecture.lifecycleSequence.slice(0, 4).map((phase, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-xs">
-                    <span className="text-[11px] font-mono font-bold text-sky-400 bg-sky-500/10 px-1.5 py-0.2 rounded border border-sky-500/20 shrink-0 mt-0.5">
-                      {idx + 1}
-                    </span>
-                    <span className="text-slate-300 text-[11px] leading-snug">
-                      {phase.replace(/^\d+\.\s*/, '')}
-                    </span>
-                  </div>
-                ))}
+              {/* Radial Gauge */}
+              <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
+                <svg className="w-16 h-16 transform -rotate-90">
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="26"
+                    className="text-white/[0.08]"
+                    strokeWidth="5"
+                    stroke="currentColor"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="26"
+                    stroke={aiConfig.readinessScore >= 80 ? '#10b981' : aiConfig.readinessScore >= 50 ? '#00f0ff' : '#f43f5e'}
+                    strokeWidth="5"
+                    strokeDasharray={2 * Math.PI * 26}
+                    strokeDashoffset={2 * Math.PI * 26 - (aiConfig.readinessScore / 100) * (2 * Math.PI * 26)}
+                    strokeLinecap="round"
+                    fill="transparent"
+                    className="transition-all duration-1000 ease-out"
+                  />
+                </svg>
+                <span className="absolute font-mono text-xs font-black text-white">
+                  {aiConfig.readinessScore}%
+                </span>
               </div>
             </div>
 
+            {/* Lifecycle Stages */}
+            <div className="my-3 space-y-2">
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1">
+                <span>Execution Phases</span>
+                <span className="text-cyan-400">Deterministic Order</span>
+              </div>
+
+              {architecture.lifecycleSequence.slice(0, 3).map((step, idx) => (
+                <div key={idx} className="flex items-start gap-2 text-xs">
+                  <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/20 shrink-0 mt-0.5">
+                    0{idx + 1}
+                  </span>
+                  <span className="text-slate-300 text-[11px] leading-tight truncate">
+                    {step.replace(/^\d+\.\s*/, '')}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Entry Points Footer */}
             {architecture.entryPoints.length > 0 && (
-              <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-slate-400">
-                <span>Entry Points:</span>
-                <span className="text-sky-300 truncate max-w-[200px]">
-                  {architecture.entryPoints.join(', ')}
+              <div className="pt-2.5 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>Boot Entry:</span>
+                <span className="text-cyan-300 truncate max-w-[180px] bg-black/40 px-2 py-0.5 rounded border border-white/[0.06]">
+                  {architecture.entryPoints[0]}
                 </span>
               </div>
             )}

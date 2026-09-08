@@ -1,16 +1,17 @@
 import React from 'react';
 import {
-  Compass,
+  Layers,
+  Sparkles,
+  Box,
+  FolderTree,
   FolderOpen,
   RefreshCw,
   Download,
   Search,
-  Sparkles,
-  Layers,
   ChevronDown,
-  Box,
-  FolderTree,
-  X
+  X,
+  Command,
+  Flame
 } from 'lucide-react';
 import { SAMPLE_PROJECTS } from '../presets/sampleProjects';
 
@@ -39,64 +40,75 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   onTabChange
 }) => {
+  const tabs = [
+    { id: 'graph', label: 'Architecture Flow', icon: Layers, hotkey: '1' },
+    { id: 'stack', label: 'Why This Stack?', icon: Box, hotkey: '2' },
+    { id: 'ai', label: 'AI Intelligence', icon: Sparkles, hotkey: '3' },
+    { id: 'files', label: 'Files & Layers', icon: FolderTree, hotkey: '4' }
+  ] as const;
+
   return (
-    <header className="border-b border-white/[0.08] bg-[#070b16]/80 backdrop-blur-xl sticky top-0 z-40 px-4 lg:px-6 py-2.5 transition-all">
-      <div className="max-w-[1700px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-3">
-        {/* Brand & Workspace Picker */}
-        <div className="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
+    <header className="sticky top-0 z-50 w-full px-4 lg:px-8 py-3 bg-[#030712]/75 backdrop-blur-2xl border-b border-white/[0.08] transition-all">
+      <div className="max-w-[1780px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-3">
+        {/* Brand & Workspace Hub */}
+        <div className="flex items-center gap-4 w-full lg:w-auto justify-between lg:justify-start">
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 via-indigo-500 to-purple-600 p-[1px] shadow-lg shadow-sky-500/20 flex items-center justify-center">
-                <div className="w-full h-full bg-[#090e1f] rounded-[11px] flex items-center justify-center">
-                  <Compass className="w-5 h-5 text-sky-400" />
+            {/* Logo Icon Mark */}
+            <div className="relative group cursor-pointer">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-fuchsia-500 p-[1.5px] shadow-glow-cyan shadow-sm transition-transform duration-300 group-hover:scale-105">
+                <div className="w-full h-full bg-[#070c1b] rounded-[14px] flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 to-transparent opacity-50" />
+                  <Flame className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]" />
                 </div>
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 ring-2 ring-[#070b16]"></span>
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500 ring-2 ring-[#030712]"></span>
               </span>
             </div>
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-sm tracking-tight text-white">ProjectLens</span>
-                <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 font-semibold tracking-wider">
-                  v1.2
+                <span className="font-extrabold text-base tracking-tight text-white font-sans">
+                  PROJECT<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400">LENS</span>
+                </span>
+                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 font-semibold tracking-wider">
+                  STUDIO
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium">Workspace Architecture & AI Inspector</p>
+              <p className="text-[11px] text-slate-400 font-medium">Deep Workspace & Architecture Intelligence</p>
             </div>
           </div>
 
-          <div className="h-6 w-[1px] bg-white/[0.08] hidden sm:block mx-1" />
+          <div className="h-7 w-[1px] bg-white/[0.08] hidden sm:block mx-1" />
 
-          {/* Workspace Preset Dropdown */}
+          {/* Workspace Switcher */}
           <div className="flex items-center gap-2">
             <div className="relative">
               <select
                 value={currentPresetId}
                 onChange={(e) => onSelectPreset(e.target.value)}
-                className="appearance-none bg-[#0e1628]/90 border border-white/[0.1] rounded-lg text-xs font-medium text-slate-200 py-1.5 pl-3 pr-8 hover:border-sky-500/50 focus:outline-none focus:ring-2 focus:ring-sky-500/30 transition-all cursor-pointer shadow-sm"
+                className="appearance-none bg-[#091124] border border-white/[0.12] hover:border-cyan-500/50 rounded-xl text-xs font-semibold text-slate-200 py-2 pl-3.5 pr-8 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 transition-all cursor-pointer shadow-inner"
               >
                 {SAMPLE_PROJECTS.map((preset) => (
-                  <option key={preset.id} value={preset.id} className="bg-[#0b1220] text-slate-200">
+                  <option key={preset.id} value={preset.id} className="bg-[#070d1e] text-slate-200">
                     {preset.name}
                   </option>
                 ))}
                 {currentPresetId === 'custom' && (
-                  <option value="custom" className="bg-[#0b1220] text-sky-400">
-                    📁 Custom Local Workspace
+                  <option value="custom" className="bg-[#070d1e] text-cyan-400">
+                    ⚡ Live Local Workspace
                   </option>
                 )}
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
-            {/* Folder trigger */}
+            {/* Folder Picker button */}
             <button
               onClick={onOpenLocalFolder}
-              className="flex items-center gap-1.5 text-xs font-medium bg-white/[0.05] hover:bg-white/[0.09] text-slate-200 px-2.5 py-1.5 rounded-lg border border-white/[0.1] hover:border-white/[0.2] transition-all shadow-sm group"
-              title="Inspect any local project folder on your machine"
+              className="flex items-center gap-1.5 text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white px-3 py-2 rounded-xl border border-white/[0.09] hover:border-white/[0.2] transition-all shadow-sm group"
+              title="Inspect local folder from disk via HTML5 File System API"
             >
               <FolderOpen className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
               <span className="hidden sm:inline">Open Folder</span>
@@ -104,90 +116,75 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Center Tabs Navigation */}
-        <nav className="flex items-center bg-[#0d1424]/90 p-1 rounded-xl border border-white/[0.08] shadow-inner text-xs">
-          <button
-            onClick={() => onTabChange('graph')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all font-medium ${
-              activeTab === 'graph'
-                ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/25'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Architecture Flow</span>
-          </button>
-          <button
-            onClick={() => onTabChange('stack')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all font-medium ${
-              activeTab === 'stack'
-                ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/25'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-            }`}
-          >
-            <Box className="w-3.5 h-3.5" />
-            <span>Why This Stack?</span>
-          </button>
-          <button
-            onClick={() => onTabChange('ai')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all font-medium ${
-              activeTab === 'ai'
-                ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/25'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>AI Context</span>
-          </button>
-          <button
-            onClick={() => onTabChange('files')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all font-medium ${
-              activeTab === 'files'
-                ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/25'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-            }`}
-          >
-            <FolderTree className="w-3.5 h-3.5" />
-            <span>Files & Layers</span>
-          </button>
+        {/* Center Navigation Capsule */}
+        <nav className="flex items-center bg-[#070c1a]/90 p-1.5 rounded-2xl border border-white/[0.08] shadow-2xl backdrop-blur-md">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onTabChange(tab.id)}
+                className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
+                  isActive
+                    ? 'text-white bg-gradient-to-r from-cyan-500/20 via-sky-500/20 to-indigo-500/20 border border-cyan-500/40 shadow-glow-cyan'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] border border-transparent'
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 transition-colors ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
+                <span>{tab.label}</span>
+                <span className="hidden xl:inline text-[9px] font-mono px-1 py-0.2 rounded bg-black/40 text-slate-500 border border-white/[0.04]">
+                  {tab.hotkey}
+                </span>
+              </button>
+            );
+          })}
         </nav>
 
-        {/* Right Actions: Search & Export */}
+        {/* Right Search & Actions */}
         <div className="flex items-center gap-2.5 w-full lg:w-auto justify-end">
-          <div className="relative flex-1 sm:w-56">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          {/* Quick Search */}
+          <div className="relative flex-1 sm:w-60">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search stack, files, APIs..."
+              placeholder="Search stack, modules, APIs..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full bg-[#0a101f]/80 border border-white/[0.08] rounded-lg pl-8 pr-7 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500/80 focus:ring-1 focus:ring-sky-500/50 transition-all"
+              className="w-full bg-[#070d1e] border border-white/[0.09] rounded-xl pl-9 pr-8 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 focus:ring-1 focus:ring-cyan-500/30 transition-all font-sans"
             />
-            {searchQuery && (
+            {searchQuery ? (
               <button
                 onClick={() => onSearchChange('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
               >
                 <X className="w-3 h-3" />
               </button>
+            ) : (
+              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] font-mono text-slate-500 pointer-events-none bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.04]">
+                <Command className="w-2.5 h-2.5" />
+                <span>K</span>
+              </div>
             )}
           </div>
 
+          {/* Refresh Analysis */}
           <button
             onClick={onRefresh}
             disabled={isScanning}
-            className="p-2 rounded-lg bg-white/[0.05] hover:bg-white/[0.09] text-slate-300 border border-white/[0.08] hover:border-white/[0.16] transition-all disabled:opacity-50"
-            title="Re-analyze repository"
+            className="p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/[0.08] hover:border-white/[0.18] transition-all disabled:opacity-50 group shadow-sm"
+            title="Re-run AST scanner and classification"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin text-sky-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin text-cyan-400' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
           </button>
 
+          {/* Export Report */}
           <button
             onClick={onExport}
-            className="flex items-center gap-1.5 text-xs font-semibold bg-gradient-to-r from-sky-500/15 to-indigo-500/15 hover:from-sky-500/25 hover:to-indigo-500/25 text-sky-300 border border-sky-500/30 hover:border-sky-400/50 px-3 py-1.5 rounded-lg transition-all shadow-sm"
+            className="flex items-center gap-2 text-xs font-bold bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-600 hover:brightness-110 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30"
           >
-            <Download className="w-3.5 h-3.5 text-sky-400" />
-            <span>Export</span>
+            <Download className="w-3.5 h-3.5" />
+            <span>Export Report</span>
           </button>
         </div>
       </div>
