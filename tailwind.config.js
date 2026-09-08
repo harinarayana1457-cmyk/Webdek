@@ -4,28 +4,33 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        space: {
-          950: '#02040a',
-          900: '#030712',
-          850: '#060b18',
-          800: '#0a1024',
-          750: '#0f172a',
-          700: '#141e38',
-          border: 'rgba(255, 255, 255, 0.08)',
-          card: 'rgba(10, 16, 36, 0.75)',
+        studio: {
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#0f172a',
+          950: '#020617',
+          surface: '#ffffff',
+          card: 'rgba(255, 255, 255, 0.92)',
+          border: '#e2e8f0',
         },
-        cyber: {
-          cyan: '#00f0ff',
-          neon: '#06b6d4',
-          violet: '#8b5cf6',
-          purple: '#a855f7',
-          emerald: '#10b981',
-          rose: '#f43f5e',
-          amber: '#fbbf24',
+        brand: {
+          blue: '#2563eb',
+          indigo: '#4f46e5',
+          cyan: '#0284c7',
+          emerald: '#059669',
+          amber: '#d97706',
+          rose: '#e11d48',
+          purple: '#7c3aed',
         }
       },
       fontFamily: {
@@ -33,24 +38,20 @@ export default {
         mono: ['"JetBrains Mono"', 'Fira Code', 'Consolas', 'monospace'],
       },
       boxShadow: {
-        'glow-cyan': '0 0 25px -5px rgba(0, 240, 255, 0.3)',
-        'glow-violet': '0 0 25px -5px rgba(139, 92, 246, 0.35)',
-        'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.3)',
-        'glow-card': '0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
-        'specular': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.12)',
+        'soft-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
+        'soft-md': '0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04)',
+        'soft-lg': '0 10px 30px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03)',
+        'soft-xl': '0 20px 40px -8px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.04)',
+        'glow-blue': '0 0 20px -3px rgba(37, 99, 235, 0.25)',
+        'glow-indigo': '0 0 20px -3px rgba(79, 70, 229, 0.25)',
       },
       animation: {
-        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
-        'float': 'float 6s ease-in-out infinite',
+        'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
       },
       keyframes: {
-        pulseGlow: {
-          '0%, 100%': { opacity: '0.4' },
-          '50%': { opacity: '0.8' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-6px)' },
+        pulseSubtle: {
+          '0%, 100%': { opacity: '0.6' },
+          '50%': { opacity: '1' },
         }
       }
     },

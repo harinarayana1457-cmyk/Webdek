@@ -79,36 +79,36 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0b1220] border border-white/[0.1] rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 px-6 border-b border-white/[0.08] bg-[#070b16]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center">
-              <Download className="w-4 h-4 text-sky-400" />
+        <div className="flex items-center justify-between p-5 px-6 border-b border-slate-100 bg-slate-50/70">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm">
+              <Download className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-white">Export Architecture Report</h3>
-              <p className="text-[11px] text-slate-400">Export for documentation, team PRs, or architecture reviews</p>
+              <h3 className="font-bold text-sm text-slate-900">Export Architecture Report</h3>
+              <p className="text-[11px] text-slate-500">Export for documentation, team PRs, or architecture reviews</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Format Selector Bar */}
-        <div className="flex items-center justify-between px-6 py-3 bg-[#0d1424]/60 border-b border-white/[0.06] text-xs">
+        <div className="flex items-center justify-between px-6 py-3 bg-white border-b border-slate-100 text-xs">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setFormat('markdown')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition font-medium ${
                 format === 'markdown'
-                  ? 'bg-sky-500 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white bg-white/[0.04]'
+                  ? 'bg-blue-600 text-white shadow-sm font-bold'
+                  : 'text-slate-600 hover:text-slate-900 bg-slate-100'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -118,8 +118,8 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
               onClick={() => setFormat('json')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition font-medium ${
                 format === 'json'
-                  ? 'bg-sky-500 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white bg-white/[0.04]'
+                  ? 'bg-blue-600 text-white shadow-sm font-bold'
+                  : 'text-slate-600 hover:text-slate-900 bg-slate-100'
               }`}
             >
               <Code2 className="w-3.5 h-3.5" />
@@ -130,14 +130,14 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-xs bg-white/[0.06] hover:bg-white/[0.1] text-slate-200 px-3 py-1.5 rounded-lg border border-white/[0.08] transition"
+              className="flex items-center gap-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-200 transition font-medium"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
             <button
               onClick={handleDownload}
-              className="flex items-center gap-1.5 text-xs bg-sky-500 hover:bg-sky-600 text-white px-3.5 py-1.5 rounded-lg font-semibold transition shadow-sm"
+              className="flex items-center gap-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl font-semibold transition shadow-sm"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Download File</span>
@@ -146,7 +146,7 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
         </div>
 
         {/* Content Preview */}
-        <div className="p-5 overflow-y-auto flex-1 font-mono text-xs text-slate-300 bg-[#060913]">
+        <div className="p-5 overflow-y-auto flex-1 font-mono text-xs text-slate-100 bg-slate-900">
           <pre className="whitespace-pre-wrap leading-relaxed">{content}</pre>
         </div>
       </div>
