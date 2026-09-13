@@ -6,12 +6,12 @@ import {
   Layers,
   ArrowRight,
   Database,
-  FileCode2,
   ShieldCheck,
   Zap,
   GitBranch,
-  Radio,
-  Flame
+  Flame,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { animate, spring, stagger } from 'animejs';
 import { useAnimeScope } from '../hooks/useAnimeScope';
@@ -35,6 +35,7 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
   } = data;
 
   const flowSteps = architecture.dataFlowSummary.split('->').map((s) => s.trim());
+  const [isExpanded, setIsExpanded] = useState(false);
   const [displayScore, setDisplayScore] = useState(0);
   const [displayConfidence, setDisplayConfidence] = useState(0);
 
@@ -43,7 +44,7 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
     const scoreObj = { val: 0 };
     animate(scoreObj, {
       val: aiConfig.readinessScore,
-      duration: 1200,
+      duration: 1000,
       ease: 'out(3)',
       round: 1,
       onUpdate: () => setDisplayScore(scoreObj.val)
@@ -52,7 +53,7 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
     const confObj = { val: 0 };
     animate(confObj, {
       val: architecture.confidence,
-      duration: 1000,
+      duration: 900,
       ease: 'out(3)',
       round: 1,
       onUpdate: () => setDisplayConfidence(confObj.val)
@@ -61,247 +62,211 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
     // 2. Power capsules staggered entrance
     animate('.power-capsule', {
       opacity: [0, 1],
-      translateY: [-10, 0],
-      duration: 500,
-      delay: stagger(40),
-      ease: 'out(4)'
-    });
-
-    // 3. Sector chips staggered spring entry
-    animate('.sector-chip', {
-      opacity: [0, 1],
-      scale: [0.88, 1],
-      duration: 600,
-      delay: stagger(50, { start: 150 }),
-      ease: spring({ bounce: 0.35 })
-    });
-
-    // 4. Execution checkpoints
-    animate('.checkpoint-item', {
-      opacity: [0, 1],
-      translateX: [-12, 0],
+      translateY: [-6, 0],
       duration: 400,
-      delay: stagger(70, { start: 250 }),
+      delay: stagger(30),
       ease: 'out(3)'
     });
 
-    // 5. Dial stroke dashoffset rev-up
-    const circumference = 2 * Math.PI * 26;
-    const targetOffset = circumference - (aiConfig.readinessScore / 100) * circumference;
-    animate('.dial-ring', {
-      strokeDashoffset: [circumference, targetOffset],
-      duration: 1200,
-      ease: 'out(4)'
-    });
-  }, [data.projectName, aiConfig.readinessScore, architecture.confidence]);
+    // 3. Dial stroke animation when expanded
+    if (isExpanded) {
+      const circumference = 2 * Math.PI * 26;
+      const targetOffset = circumference - (aiConfig.readinessScore / 100) * circumference;
+      animate('.dial-ring', {
+        strokeDashoffset: [circumference, targetOffset],
+        duration: 800,
+        ease: 'out(4)'
+      });
 
-  const circumference = 2 * Math.PI * 26;
+      animate('.expand-drawer', {
+        opacity: [0, 1],
+        translateY: [-10, 0],
+        duration: 400,
+        ease: spring({ bounce: 0.25 })
+      });
+    }
+  }, [data.projectName, isExpanded, aiConfig.readinessScore, architecture.confidence]);
 
   return (
-    <div ref={root} className="border-b border-white/[0.08] bg-gradient-to-b from-[#051329] via-[#040f21] to-[#030b17] px-4 lg:px-8 py-5 relative">
-      <div className="max-w-[1780px] mx-auto space-y-4">
-        {/* Top Power-Unit Capsules */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Framework */}
-            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
-              <Boxes className="w-4 h-4 text-[#ffd100] group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 text-[11px] font-sans">Framework:</span>
-              <span className="font-extrabold text-white tracking-tight font-mono">{primaryFramework}</span>
+    <div ref={root} className="border-b border-white/[0.08] bg-[#051329] px-4 lg:px-8 py-3 relative transition-all">
+      <div className="max-w-[1780px] mx-auto space-y-3">
+        {/* Compact Summary Bar: Single Clean Row */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          {/* Left: Architecture Pattern Badge */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#e00034] to-[#c7002e] text-white shadow-rb-red shadow-sm">
+              <Layers className="w-4 h-4 text-[#ffd100]" />
+              <span className="text-xs font-black tracking-wide font-sans">{architecture.pattern}</span>
             </div>
 
-            {/* Runtime */}
-            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
-              <Cpu className="w-4 h-4 text-[#00a3ff] group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 text-[11px] font-sans">Runtime:</span>
-              <span className="font-extrabold text-white tracking-tight font-mono">{primaryRuntime}</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[11px] font-mono font-bold">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{displayConfidence}% Match</span>
             </div>
 
-            {/* Styling */}
-            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
-              <Palette className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 text-[11px] font-sans">Styling:</span>
-              <span className="font-extrabold text-white tracking-tight font-mono">{stylingEngine}</span>
+            <span className="hidden xl:inline text-xs text-slate-300 truncate max-w-md font-medium">
+              {architecture.summary}
+            </span>
+          </div>
+
+          {/* Center: Key Tech Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="power-capsule flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#081a38] border border-white/[0.08] text-xs text-slate-200">
+              <Boxes className="w-3.5 h-3.5 text-[#ffd100]" />
+              <span className="text-slate-400 text-[10px]">Framework:</span>
+              <span className="font-bold text-white font-mono">{primaryFramework}</span>
             </div>
 
-            {/* State Management */}
-            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
-              <Database className="w-4 h-4 text-[#ffd100] group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 text-[11px] font-sans">State:</span>
-              <span className="font-extrabold text-white tracking-tight font-mono">{stateLayer}</span>
+            <div className="power-capsule flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#081a38] border border-white/[0.08] text-xs text-slate-200">
+              <Cpu className="w-3.5 h-3.5 text-[#00a3ff]" />
+              <span className="text-slate-400 text-[10px]">Runtime:</span>
+              <span className="font-bold text-white font-mono">{primaryRuntime}</span>
             </div>
 
-            {/* AI Layer */}
-            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-[#e00034]/40 hover:border-[#e00034] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
-              <Flame className="w-4 h-4 text-[#e00034] group-hover:scale-110 transition-transform" />
-              <span className="text-slate-400 text-[11px] font-sans">AI Layer:</span>
-              <span className="font-extrabold text-[#ffd100] tracking-tight font-mono">{aiLayer}</span>
+            <div className="power-capsule flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#081a38] border border-white/[0.08] text-xs text-slate-200">
+              <Database className="w-3.5 h-3.5 text-purple-400" />
+              <span className="text-slate-400 text-[10px]">State:</span>
+              <span className="font-bold text-white font-mono">{stateLayer}</span>
+            </div>
+
+            <div className="power-capsule flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#081a38] border border-white/[0.08] text-xs text-slate-200">
+              <Palette className="w-3.5 h-3.5 text-[#e00034]" />
+              <span className="text-slate-400 text-[10px]">Styling:</span>
+              <span className="font-bold text-white font-mono">{stylingEngine}</span>
+            </div>
+
+            <div className="power-capsule flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#081a38] border border-white/[0.08] text-xs text-slate-200">
+              <Flame className="w-3.5 h-3.5 text-[#ffd100]" />
+              <span className="text-slate-400 text-[10px]">AI:</span>
+              <span className="font-bold text-[#ffd100] font-mono">{aiLayer}</span>
             </div>
           </div>
 
-          {/* Telemetry Micro HUD */}
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
-            <div className="flex items-center gap-1.5 bg-[#091d3d] px-3 py-1.5 rounded-xl border border-white/[0.08]">
-              <FileCode2 className="w-3.5 h-3.5 text-[#ffd100]" />
-              <span>{manifestsFound.length} Configs Verified</span>
+          {/* Right: Expand Details Toggle & Quick Counts */}
+          <div className="flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-1.5 text-xs font-mono text-slate-300 bg-[#081a38] px-2.5 py-1 rounded-lg border border-white/[0.08]">
+              <Zap className="w-3.5 h-3.5 text-[#ffd100]" />
+              <span>{dependencies.length} Packages</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-[#091d3d] px-3 py-1.5 rounded-xl border border-white/[0.08]">
-              <Zap className="w-3.5 h-3.5 text-[#e00034]" />
-              <span className="text-white font-extrabold">{dependencies.length}</span>
-              <span>Power Components</span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-[#091d3d] px-3 py-1.5 rounded-xl border border-white/[0.08]">
-              <Radio className="w-3 h-3 text-[#ffd100] animate-pulse" />
-              <span className="text-[#ffd100] font-bold">Pit Wall Online</span>
-            </div>
+
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-lg border transition-all ${
+                isExpanded
+                  ? 'bg-[#e00034] text-white border-[#e00034] shadow-rb-red'
+                  : 'bg-[#092247] hover:bg-[#0c2a57] text-[#ffd100] border-[#ffd100]/30 hover:border-[#ffd100]'
+              }`}
+            >
+              <span>{isExpanded ? 'Hide Architecture Details' : 'Architecture Details'}</span>
+              {isExpanded ? (
+                <ChevronUp className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5" />
+              )}
+            </button>
           </div>
         </div>
 
-        {/* Bento Hero Telemetry Widgets */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Main Chassis Architecture Card */}
-          <div className="lg:col-span-8 p-6 rounded-3xl rb-widget flex flex-col justify-between group overflow-hidden">
-            {/* Background Red Bull sun glow */}
-            <div className="absolute top-0 right-0 w-80 h-40 bg-gradient-to-bl from-[#e00034]/15 via-[#ffd100]/10 to-transparent blur-3xl pointer-events-none" />
-
-            <div>
-              {/* Pattern Header */}
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#e00034] to-[#ffd100] p-[2px] shadow-rb-red">
-                    <div className="w-full h-full bg-[#051329] rounded-[14px] flex items-center justify-center">
-                      <Layers className="w-5 h-5 text-[#ffd100]" />
-                    </div>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-mono tracking-widest text-[#ffd100] font-extrabold block">
-                      POWER UNIT & CHASSIS SPECIFICATION
-                    </span>
-                    <h2 className="text-xl font-black text-white tracking-tight font-sans italic">
-                      {architecture.pattern}
-                    </h2>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="rb-racing-badge text-xs font-mono font-black px-3.5 py-1 rounded bg-[#e00034] text-white shadow-rb-red flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>{displayConfidence}% TELEMETRY MATCH</span>
-                  </span>
-                </div>
-              </div>
-
-              <p className="text-xs text-slate-300 leading-relaxed max-w-4xl font-normal mt-1">
-                {architecture.summary}
-              </p>
-            </div>
-
-            {/* Circuit Telemetry Pipeline Track */}
-            <div className="mt-6 pt-4 border-t border-white/[0.08]">
-              <div className="flex items-center justify-between mb-2.5">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
-                  <GitBranch className="w-3.5 h-3.5 text-[#ffd100]" />
-                  Telemetry Flow Pipeline (Lap Sectors)
-                </span>
-                <span className="text-[10px] font-mono text-slate-400">High-Speed Execution Sequence</span>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2 overflow-x-auto py-1">
-                {flowSteps.map((step, idx) => (
-                  <React.Fragment key={idx}>
-                    <div className="sector-chip flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#06142a] border border-white/[0.1] text-[11px] font-mono text-slate-200 shadow-inner hover:border-[#ffd100] hover:text-white transition-all cursor-default group/sector">
-                      <span className="w-2 h-2 rounded-full bg-[#e00034] group-hover/sector:bg-[#ffd100] transition-colors shadow-rb-red" />
-                      <span className="font-bold">Sector {idx + 1}:</span>
-                      <span>{step}</span>
-                    </div>
-                    {idx < flowSteps.length - 1 && (
-                      <ArrowRight className="w-3.5 h-3.5 text-[#ffd100]/60 shrink-0" />
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Pit Wall AI Speedometer Dial Widget */}
-          <div className="lg:col-span-4 p-6 rounded-3xl rb-widget flex flex-col justify-between">
-            {/* Speedometer Header */}
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+        {/* Expandable Architecture Details Drawer */}
+        {isExpanded && (
+          <div className="expand-drawer grid grid-cols-1 lg:grid-cols-12 gap-4 pt-3 border-t border-white/[0.08]">
+            {/* Full Summary & Data Flow Pipeline */}
+            <div className="lg:col-span-8 p-5 rounded-2xl bg-[#061630] border border-white/[0.08] space-y-4">
               <div>
-                <span className="text-[10px] uppercase font-mono tracking-widest text-[#ffd100] font-black block">
-                  PIT WALL AI HUD
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#ffd100] font-bold block mb-1">
+                  SYSTEM ARCHITECTURE OVERVIEW
                 </span>
-                <h3 className="text-sm font-extrabold text-white tracking-tight mt-0.5 italic">
-                  Agent Telemetry & Alignment
-                </h3>
-                <p className="text-[11px] text-slate-400 mt-0.5">Rules, MCP telemetry & directives</p>
+                <p className="text-xs text-slate-200 leading-relaxed font-normal">
+                  {architecture.summary}
+                </p>
               </div>
 
-              {/* Speedometer Dial */}
-              <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
-                <svg className="w-16 h-16 transform -rotate-90">
-                  <circle
-                    cx="32"
-                    cy="32"
-                    r="26"
-                    className="text-white/[0.08]"
-                    strokeWidth="5"
-                    stroke="currentColor"
-                    fill="transparent"
-                  />
-                  <circle
-                    cx="32"
-                    cy="32"
-                    r="26"
-                    stroke={aiConfig.readinessScore >= 80 ? '#e00034' : '#ffd100'}
-                    strokeWidth="5"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={circumference}
-                    strokeLinecap="round"
-                    fill="transparent"
-                    className="dial-ring shadow-rb-red"
-                  />
-                </svg>
-                <div className="absolute flex flex-col items-center justify-center">
-                  <span className="font-mono text-xs font-black text-white">
+              {/* Data Flow Pipeline */}
+              <div className="space-y-2 pt-3 border-t border-white/[0.08]">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
+                    <GitBranch className="w-3.5 h-3.5 text-[#ffd100]" />
+                    Data Flow Sequence
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">Step-by-step Execution</span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 overflow-x-auto py-1">
+                  {flowSteps.map((step, idx) => (
+                    <React.Fragment key={idx}>
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#040e1f] border border-white/[0.08] text-[11px] font-mono text-slate-200">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#e00034]" />
+                        <span className="text-[#ffd100] font-bold">Step {idx + 1}:</span>
+                        <span>{step}</span>
+                      </div>
+                      {idx < flowSteps.length - 1 && (
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* AI Readiness & Startup Lifecycle */}
+            <div className="lg:col-span-4 p-5 rounded-2xl bg-[#061630] border border-white/[0.08] space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#ffd100] font-bold block">
+                    AI AGENT READINESS
+                  </span>
+                  <h4 className="text-xs font-bold text-white mt-0.5">Rules, MCP & Environment</h4>
+                </div>
+
+                {/* Dial */}
+                <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
+                  <svg className="w-12 h-12 transform -rotate-90">
+                    <circle
+                      cx="24"
+                      cy="24"
+                      r="19"
+                      className="text-white/[0.08]"
+                      strokeWidth="4"
+                      stroke="currentColor"
+                      fill="transparent"
+                    />
+                    <circle
+                      cx="24"
+                      cy="24"
+                      r="19"
+                      stroke={aiConfig.readinessScore >= 80 ? '#e00034' : '#ffd100'}
+                      strokeWidth="4"
+                      strokeDasharray={2 * Math.PI * 19}
+                      strokeDashoffset={2 * Math.PI * 19 * (1 - displayScore / 100)}
+                      strokeLinecap="round"
+                      fill="transparent"
+                    />
+                  </svg>
+                  <span className="absolute text-[10px] font-mono font-black text-white">
                     {displayScore}%
                   </span>
-                  <span className="text-[8px] font-mono text-[#ffd100] uppercase font-bold">RPM</span>
                 </div>
               </div>
-            </div>
 
-            {/* Circuit Phases */}
-            <div className="my-3.5 space-y-2">
-              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1">
-                <span>Execution Checkpoints</span>
-                <span className="text-[#ffd100] font-bold">Optimal Path</span>
-              </div>
-
-              {architecture.lifecycleSequence.slice(0, 3).map((step, idx) => (
-                <div key={idx} className="checkpoint-item flex items-start gap-2.5 text-xs">
-                  <span className="text-[10px] font-mono font-extrabold text-white bg-[#e00034] px-1.5 py-0.2 rounded shrink-0 mt-0.5 shadow-sm">
-                    P{idx + 1}
-                  </span>
-                  <span className="text-slate-300 text-[11px] leading-tight truncate">
-                    {step.replace(/^\d+\.\s*/, '')}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Paddock Boot Entry */}
-            {architecture.entryPoints.length > 0 && (
-              <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-slate-400">
-                <span>Paddock Entry:</span>
-                <span className="text-[#ffd100] font-bold truncate max-w-[180px] bg-[#06142a] px-2.5 py-1 rounded-lg border border-white/[0.1]">
-                  {architecture.entryPoints[0]}
+              {/* Startup Lifecycle */}
+              <div className="space-y-1.5 text-[11px] font-mono text-slate-300">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">
+                  Startup Lifecycle:
                 </span>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span>Entry point: <strong className="text-white font-mono">src/main.tsx</strong></span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span>Verified manifests: <strong className="text-white font-mono">{manifestsFound.join(', ')}</strong></span>
+                </div>
               </div>
-            )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
+export default OverviewBar;

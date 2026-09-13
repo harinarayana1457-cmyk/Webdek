@@ -99,10 +99,10 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
             </div>
             <div>
               <span className="text-[10px] uppercase font-mono tracking-widest text-[#ffd100] font-black block">
-                F1 PIT WALL AUTONOMOUS AGENT CONSOLE
+                AI ASSISTANT SETUP & CONTEXT DIRECTIVES
               </span>
               <h2 className="text-xl font-black text-white tracking-tight font-sans italic">
-                Paddock AI Telemetry & Context Directives
+                AI Agent Context, Rules & MCP Tools
               </h2>
             </div>
             <span
@@ -112,20 +112,20 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                   : 'bg-[#ffd100] text-black border-[#ffb800]'
               }`}
             >
-              <span>{displayScore}% RPM READINESS</span>
+              <span>{displayScore}% READINESS SCORE</span>
             </span>
           </div>
 
           <p className="text-xs text-slate-300 max-w-3xl leading-relaxed font-medium">
             Evaluates how thoroughly this codebase equips autonomous agents (Antigravity, Cursor, Claude Code)
-            with architectural constraints, Model Context Protocol (MCP) telemetry tools, and environment variables.
+            with architectural guidelines (`.cursorrules`), Model Context Protocol (MCP) server tools, and environment secrets.
           </p>
         </div>
 
         {/* Readiness Metric Hub */}
         <div className="w-full md:w-72 bg-[#040e1f] p-5 rounded-2xl border border-white/[0.1] shrink-0 z-10 shadow-inner">
           <div className="flex justify-between text-xs font-mono text-slate-300 mb-2">
-            <span className="font-bold">Agent Horsepower</span>
+            <span className="font-bold">AI Agent Readiness</span>
             <span className="font-black text-[#ffd100]">{displayScore}%</span>
           </div>
 
@@ -147,7 +147,7 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
             </div>
             <div className="flex items-center gap-1.5 bg-[#081b3a] p-2 rounded-xl border border-white/[0.08]">
               <Server className="w-3.5 h-3.5 text-[#00a3ff]" />
-              <span>MCP: {aiConfig.mcpServers.length} Feeds</span>
+              <span>MCP: {aiConfig.mcpServers.length} Servers</span>
             </div>
           </div>
         </div>

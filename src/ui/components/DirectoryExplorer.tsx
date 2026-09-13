@@ -81,13 +81,13 @@ export const DirectoryExplorer: React.FC<DirectoryExplorerProps> = ({ layers, al
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-base font-black text-white tracking-tight uppercase font-sans italic">
-                PADDOCK DIRECTORY & SECTOR HIERARCHY
+                PROJECT DIRECTORY & LAYER HIERARCHY
               </h3>
               <span className="rb-racing-badge text-[10px] font-mono px-2 py-0.5 rounded bg-[#ffd100] text-[#051329] font-black">
                 <span>INDEXED</span>
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium">Source files partitioned across decoupled aerodynamic architecture boundaries</p>
+            <p className="text-[11px] text-slate-400 font-medium">Source files organized across clean architectural layer boundaries</p>
           </div>
         </div>
 

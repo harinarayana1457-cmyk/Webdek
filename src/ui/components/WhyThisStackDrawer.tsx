@@ -167,13 +167,13 @@ export const WhyThisStackDrawer: React.FC<WhyThisStackDrawerProps> = ({
         {/* Sort selector */}
         <div className="flex items-center gap-2 text-xs text-slate-300 self-end md:self-auto shrink-0 font-mono">
           <ArrowUpDown className="w-3.5 h-3.5 text-[#ffd100]" />
-          <span className="font-bold">Sort Spec:</span>
+          <span className="font-bold">Sort By:</span>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
             className="bg-[#051329] border border-white/[0.12] hover:border-[#ffd100] rounded-xl px-3 py-1.5 text-white text-xs focus:outline-none focus:border-[#ffd100] transition-colors cursor-pointer font-bold"
           >
-            <option value="significance">Horsepower & Significance</option>
+            <option value="significance">Significance & Impact</option>
             <option value="name">Alphabetical (A-Z)</option>
           </select>
         </div>
@@ -232,15 +232,15 @@ export const WhyThisStackDrawer: React.FC<WhyThisStackDrawerProps> = ({
                       title="Heuristically inferred package"
                     >
                       <HelpCircle className="w-3 h-3" />
-                      Heuristic
+                      Inferred
                     </span>
                   ) : (
                     <span
                       className="flex items-center gap-1.5 text-[10px] font-mono text-white bg-[#e00034] px-3 py-1 rounded-full border border-[#ff003c] font-black shadow-rb-red"
-                      title="Deterministic Verified Catalog Match"
+                      title="Verified Manifest Match"
                     >
                       <ShieldCheck className="w-3 h-3 text-[#ffd100]" />
-                      Telemetry Verified
+                      Verified Match
                     </span>
                   )}
                 </div>
@@ -251,7 +251,7 @@ export const WhyThisStackDrawer: React.FC<WhyThisStackDrawerProps> = ({
                 <div className="flex items-center justify-between text-[10px] font-mono text-slate-300 mb-1.5 font-bold">
                   <span className="flex items-center gap-1.5 text-[#ffd100]">
                     <Zap className="w-3.5 h-3.5 text-[#ffd100]" />
-                    POWER UNIT CAPABILITY
+                    PACKAGE SIGNIFICANCE & IMPACT
                   </span>
                   <span className="text-white font-extrabold">{getHorsepowerPct(dep.level)}</span>
                 </div>

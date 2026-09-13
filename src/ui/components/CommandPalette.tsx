@@ -85,36 +85,44 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   // Quick navigation shortcuts
   const navShortcuts = [
     {
-      id: 'explain' as const,
-      label: 'Plain English Guide & Simple Concepts',
-      desc: 'Relatable analogies (F1, Restaurant) and jargon-free FAQ',
-      icon: BookOpen,
-      badge: 'NEW GUIDE',
-      keywords: 'explain guide plain english simple beginner faq help concepts analogy'
-    },
-    {
       id: 'graph' as const,
-      label: 'Telemetry Flow Graph',
-      desc: 'Interactive visual circuit diagram of modules',
+      label: 'Architecture Map',
+      desc: 'Interactive visual component diagram and connections',
       icon: Layers,
       badge: 'TAB 1',
-      keywords: 'graph circuit flow visual modules telemetry nodes'
+      keywords: 'architecture map graph diagram flow visual components'
     },
     {
       id: 'stack' as const,
-      label: 'Power Unit & Tech Stack',
-      desc: 'Inspect packages, dependencies, and engines',
+      label: 'Tech Stack & Libraries',
+      desc: 'Inspect dependencies, frameworks, and package specs',
       icon: Box,
       badge: 'TAB 2',
-      keywords: 'stack dependencies power unit packages runtime framework'
+      keywords: 'stack dependencies packages libraries framework runtime'
     },
     {
       id: 'ai' as const,
-      label: 'Pit Wall AI & MCP Inspector',
+      label: 'AI Assistant Setup',
       desc: 'Inspect AI readiness score, .cursorrules, and MCP tools',
       icon: Zap,
       badge: 'TAB 3',
-      keywords: 'ai mcp rules cursor pit wall prompt agent'
+      keywords: 'ai assistant mcp rules cursor prompt agent tools'
+    },
+    {
+      id: 'files' as const,
+      label: 'Project Files & Folders',
+      desc: 'Directory structure organized by architectural layers',
+      icon: FileCode,
+      badge: 'TAB 4',
+      keywords: 'files folders project tree directory code'
+    },
+    {
+      id: 'explain' as const,
+      label: 'Simple Guide & FAQ',
+      desc: 'Relatable analogies (F1, Restaurant) and jargon-free FAQ',
+      icon: BookOpen,
+      badge: 'TAB 5',
+      keywords: 'explain guide plain english simple beginner faq help concepts analogy'
     }
   ].filter(
     (item) =>
@@ -265,7 +273,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             <div className="space-y-1.5">
               <div className="px-2 text-[10px] font-mono uppercase font-bold text-[#e00034] flex items-center gap-1.5">
                 <Box className="w-3.5 h-3.5 text-[#e00034]" />
-                <span>Power Unit & Libraries ({matchedDeps.length})</span>
+                <span>Tech Stack & Packages ({matchedDeps.length})</span>
               </div>
               {matchedDeps.map((dep) => (
                 <div
@@ -309,7 +317,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             <div className="space-y-1.5">
               <div className="px-2 text-[10px] font-mono uppercase font-bold text-sky-400 flex items-center gap-1.5">
                 <FileCode className="w-3.5 h-3.5 text-sky-400" />
-                <span>Paddock Files ({matchedFiles.length})</span>
+                <span>Project Files ({matchedFiles.length})</span>
               </div>
               {matchedFiles.map((file, idx) => (
                 <div
@@ -335,7 +343,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
           {matchedNodes.length === 0 && matchedDeps.length === 0 && matchedFiles.length === 0 && navShortcuts.length === 0 && (
             <div className="p-8 text-center text-slate-400">
-              <p className="text-xs font-mono">No telemetry components found for "{query}"</p>
+              <p className="text-xs font-mono">No matching items found for "{query}"</p>
             </div>
           )}
         </div>
@@ -349,7 +357,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             <span>ESC to close</span>
           </div>
           <span className="flex items-center gap-1.5 font-bold text-white">
-            <Zap className="w-3 h-3 text-[#e00034] fill-[#e00034]" /> Red Bull Telemetry Engine
+            <Zap className="w-3 h-3 text-[#e00034] fill-[#e00034]" /> ProjectLens Architecture Engine
           </span>
         </div>
       </div>

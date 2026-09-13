@@ -141,12 +141,29 @@ export function App() {
         {isScanning && !analysisResult ? (
           <div className="flex-1 flex flex-col items-center justify-center p-16 text-slate-400">
             <Loader2 className="w-9 h-9 text-[#e00034] animate-spin mb-3" />
-            <p className="text-sm font-mono font-bold text-slate-200">Scanning telemetry manifests & classifying aerodynamic architecture...</p>
+            <p className="text-sm font-mono font-bold text-slate-200">Scanning project files & analyzing software architecture...</p>
           </div>
         ) : analysisResult ? (
           <>
-            {/* Top Overview Bar */}
+            {/* Top Compact Summary Bar */}
             <OverviewBar data={analysisResult} />
+
+            {/* Quick Context & Interaction Tip Banner */}
+            <div className="bg-[#040e1f] border-b border-white/[0.06] px-4 lg:px-8 py-2 flex items-center justify-between text-xs text-slate-400">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>
+                  Active Project: <strong className="text-white">{analysisResult.projectName}</strong>
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-slate-300 font-mono text-[11px]">{analysisResult.architecture.pattern}</span>
+              </div>
+              <div className="hidden md:flex items-center gap-3 text-[11px] text-slate-400 font-mono">
+                <span>💡 Click any card or node to inspect details</span>
+                <span>•</span>
+                <span>Press <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-[#ffd100] border border-white/[0.1] font-bold">⌘K</kbd> to search</span>
+              </div>
+            </div>
 
             {/* Tab Panels */}
             <div className="flex-1 pb-12">

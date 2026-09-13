@@ -13,8 +13,7 @@ import {
   ZoomIn,
   ZoomOut,
   RefreshCw,
-  CheckCircle2,
-  Flag
+  CheckCircle2
 } from 'lucide-react';
 import { animate, spring, stagger } from 'animejs';
 import { useAnimeScope } from '../hooks/useAnimeScope';
@@ -113,29 +112,29 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
 
   return (
     <div ref={root} className="p-4 lg:p-8 space-y-5 max-w-[1780px] mx-auto">
-      {/* Circuit Telemetry Bar */}
+      {/* Circuit Header Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#081b3a] p-4 rounded-2xl border border-white/[0.1] shadow-2xl backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#e00034] to-[#ffd100] p-[1.5px] shadow-rb-red">
             <div className="w-full h-full bg-[#051329] rounded-[9px] flex items-center justify-center">
-              <Flag className="w-5 h-5 text-[#ffd100]" />
+              <Layers className="w-5 h-5 text-[#ffd100]" />
             </div>
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-extrabold text-white tracking-tight italic">
-                RACE CIRCUIT ARCHITECTURE CANVAS
+                INTERACTIVE ARCHITECTURE DIAGRAM
               </h3>
               <span className="rb-racing-badge text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-[#e00034] text-white font-extrabold shadow-sm">
-                <span>SECTOR TELEMETRY</span>
+                <span>SYSTEM MAP</span>
               </span>
               {q && (
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ffd100]/20 text-[#ffd100] border border-[#ffd100]/30 font-bold">
-                  Track Filter: "{q}"
+                  Filter: "{q}"
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-slate-400">Select any component module to trace power and data telemetry lines across sectors</p>
+            <p className="text-[11px] text-slate-400">Click any component to trace its data dependencies and layer connections</p>
           </div>
         </div>
 
@@ -151,7 +150,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
                   : 'text-slate-300 hover:text-white'
               }`}
             >
-              All Sectors
+              All Layers
             </button>
             {allLayers.map((layer) => (
               <button
@@ -221,7 +220,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#e00034] shadow-rb-red" />
                       <span className="text-xs uppercase font-mono font-black tracking-widest text-[#ffd100]">
-                        Sector {layerName}
+                        {layerName} Layer
                       </span>
                     </div>
                     <div className="flex-1 h-[1px] bg-gradient-to-r from-[#e00034]/40 via-white/[0.1] to-transparent" />
@@ -274,13 +273,13 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
                                   {node.label}
                                 </h4>
                                 <span className="text-[10px] font-mono text-[#ffd100] block font-bold">
-                                  CHASSIS ID: {node.id}
+                                  ID: {node.id}
                                 </span>
                               </div>
                             </div>
 
                             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.08] text-slate-300 border border-white/[0.1] font-bold">
-                              {node.filesCount} {node.filesCount === 1 ? 'part' : 'parts'}
+                              {node.filesCount} {node.filesCount === 1 ? 'file' : 'files'}
                             </span>
                           </div>
 
@@ -309,14 +308,14 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
             })}
           </div>
 
-          {/* Bottom Circuit Active Telemetry Wires */}
+          {/* Bottom Component Data Connections */}
           <div className="mt-8 pt-4 border-t border-white/[0.08] relative z-10 space-y-2.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-extrabold flex items-center gap-2">
                 <Zap className="w-3.5 h-3.5 text-[#ffd100]" />
-                Circuit Telemetry Lines ({graph.edges.length} Power Feeds)
+                Component Data Connections ({graph.edges.length} Active Links)
               </span>
-              <span className="text-[10px] font-mono text-slate-400 font-bold">Telemetry Path: Inbound ➔ Outbound</span>
+              <span className="text-[10px] font-mono text-slate-400 font-bold">Direction: Inbound ➔ Outbound</span>
             </div>
 
             <div className="flex flex-wrap gap-2 max-h-28 overflow-y-auto pr-1">
@@ -358,7 +357,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[10px] uppercase font-mono font-black tracking-widest text-[#ffd100] flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-[#e00034] shadow-rb-red" />
-                    Sector: {selectedNode.layer}
+                    Layer: {selectedNode.layer}
                   </span>
                   <span className="text-[10px] font-mono text-slate-300 px-2.5 py-0.5 rounded-full bg-black/40 border border-white/[0.1]">
                     ID: {selectedNode.id}
@@ -381,7 +380,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
               {/* Functional Role */}
               <div>
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 font-mono">
-                  Component Role & Power Output
+                  Component Role & Purpose
                 </span>
                 <p className="text-xs text-slate-200 leading-relaxed bg-[#040e1f] p-4 rounded-2xl border border-white/[0.08] font-medium">
                   {selectedNode.description}
@@ -391,7 +390,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
               {/* Technology Stack Tags */}
               <div>
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 font-mono">
-                  Assigned Power Unit Specs
+                  Assigned Technologies & Packages
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {selectedNode.tech.map((t, i) => (
@@ -408,7 +407,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
               {/* Connected Telemetry Feeds */}
               <div>
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 font-mono">
-                  Connected Sector Feeds
+                  Connected Layer Links
                 </span>
                 <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
                   {graph.edges
@@ -446,7 +445,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
           ) : (
             <div className="flex flex-col items-center justify-center text-center p-8 text-slate-400 my-auto">
               <Info className="w-8 h-8 mb-2 text-[#ffd100]" />
-              <p className="text-xs">Click any component on the circuit to inspect its telemetry specs.</p>
+              <p className="text-xs">Click any component in the diagram to inspect its technical details.</p>
             </div>
           )}
 
@@ -454,9 +453,9 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
           <div className="mt-6 pt-3.5 border-t border-white/[0.08] text-[11px] text-slate-400 font-mono flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-[#ffd100] font-black">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#ffd100]" />
-              Telemetry Synchronized
+              Architecture Verified
             </span>
-            <span>{graph.nodes.length} Nodes • {graph.edges.length} Wires</span>
+            <span>{graph.nodes.length} Components • {graph.edges.length} Links</span>
           </div>
         </div>
       </div>

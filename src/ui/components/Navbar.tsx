@@ -7,9 +7,7 @@ import {
   FolderOpen,
   RefreshCw,
   Download,
-  Search,
   ChevronDown,
-  X,
   Command,
   Zap,
   BookOpen
@@ -37,19 +35,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenLocalFolder,
   onRefresh,
   onExport,
-  searchQuery,
-  onSearchChange,
   onOpenCommandPalette,
   isScanning,
   activeTab,
   onTabChange
 }) => {
   const tabs = [
-    { id: 'graph', label: 'Telemetry Flow', icon: Layers, hotkey: '1' },
-    { id: 'stack', label: 'Power Unit & Stack', icon: Box, hotkey: '2' },
-    { id: 'ai', label: 'Pit Wall AI', icon: Sparkles, hotkey: '3' },
-    { id: 'files', label: 'Paddock Files', icon: FolderTree, hotkey: '4' },
-    { id: 'explain', label: 'Plain English Guide', icon: BookOpen, hotkey: '5' }
+    { id: 'graph', label: 'Architecture Map', icon: Layers, hotkey: '1', desc: 'Visual component graph' },
+    { id: 'stack', label: 'Tech Stack & Libraries', icon: Box, hotkey: '2', desc: 'Packages and engines' },
+    { id: 'ai', label: 'AI Assistant Setup', icon: Sparkles, hotkey: '3', desc: 'Rules and MCP tools' },
+    { id: 'files', label: 'Project Files', icon: FolderTree, hotkey: '4', desc: 'Directory structure' },
+    { id: 'explain', label: 'Simple Guide & FAQ', icon: BookOpen, hotkey: '5', desc: 'Everyday analogies' }
   ] as const;
 
   const handleEmblemClick = () => {
@@ -64,29 +60,25 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleTabClick = (tabId: 'graph' | 'stack' | 'ai' | 'files' | 'explain') => {
     onTabChange(tabId);
     animate(`#tab-${tabId}`, {
-      scale: [0.93, 1],
+      scale: [0.95, 1],
       duration: 350,
       ease: spring({ bounce: 0.5 })
     });
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#051329]/95 backdrop-blur-2xl border-b-2 border-[#e00034] shadow-2xl transition-all">
-      <div className="max-w-[1780px] mx-auto px-4 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
-        {/* Brand & Workspace Hub */}
-        <div className="flex items-center gap-4 shrink-0">
-          <div className="flex items-center gap-3">
-            {/* Red Bull Style Emblem */}
-            <div id="rb-emblem" onClick={handleEmblemClick} className="relative group cursor-pointer">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#e00034] via-[#ff003c] to-[#ffd100] p-[1.5px] shadow-rb-red shadow-lg flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
-                <div className="w-full h-full bg-[#051329] rounded-[9px] flex items-center justify-center relative overflow-hidden">
-                  <Zap className="w-5 h-5 text-[#ffd100] fill-[#ffd100] drop-shadow-[0_0_8px_rgba(255,209,0,0.8)]" />
+    <header className="sticky top-0 z-40 w-full bg-[#051329]/95 backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl transition-all">
+      {/* Top Utility Bar: Brand, Project Switcher, Quick Actions */}
+      <div className="border-b border-white/[0.06] bg-[#040e1f]/90">
+        <div className="max-w-[1780px] mx-auto px-4 lg:px-8 py-2.5 flex items-center justify-between gap-4">
+          {/* Brand Logo & Tagline */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div id="rb-emblem" onClick={handleEmblemClick} className="relative group cursor-pointer" title="ProjectLens">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#e00034] via-[#ff003c] to-[#ffd100] p-[1.5px] shadow-rb-red shadow-md flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+                <div className="w-full h-full bg-[#051329] rounded-[9px] flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-[#ffd100] fill-[#ffd100] drop-shadow-[0_0_6px_rgba(255,209,0,0.8)]" />
                 </div>
               </div>
-              <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd100] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ffd100] ring-2 ring-[#051329]"></span>
-              </span>
             </div>
 
             <div>
@@ -94,23 +86,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="font-extrabold text-base tracking-tight text-white font-sans italic">
                   PROJECT<span className="text-[#e00034]">LENS</span>
                 </span>
-                <span className="rb-racing-badge text-[10px] uppercase font-mono px-2.5 py-0.5 rounded bg-[#e00034] text-white font-black tracking-wider shadow-sm">
-                  <span>RACING HUD</span>
+                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-[#e00034]/20 border border-[#e00034]/40 text-[#ff4d6d] font-bold">
+                  WORKSPACE INSPECTOR
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium hidden sm:block">Deep Architectural Telemetry & Paddock AI</p>
+              <p className="text-[10px] text-slate-400 font-medium hidden sm:block">Software Architecture Visualizer & AI Readiness</p>
             </div>
           </div>
 
-          <div className="h-7 w-[1px] bg-white/[0.12] hidden md:block mx-1" />
-
-          {/* Preset Selector */}
-          <div className="flex items-center gap-2">
+          {/* Center: Clean Workspace / Project Picker */}
+          <div className="flex items-center gap-2 bg-[#06142a] p-1 rounded-xl border border-white/[0.1] shadow-inner">
+            <span className="text-[11px] font-mono text-slate-400 font-bold pl-2.5 hidden md:inline">
+              Project:
+            </span>
             <div className="relative">
               <select
                 value={currentPresetId}
                 onChange={(e) => onSelectPreset(e.target.value)}
-                className="appearance-none bg-[#091d3d] border border-white/[0.12] hover:border-[#ffd100] rounded-xl text-xs font-bold text-slate-100 py-2 pl-3.5 pr-8 focus:outline-none focus:ring-2 focus:ring-[#e00034]/50 transition-all cursor-pointer shadow-inner"
+                className="appearance-none bg-[#091d3d] hover:bg-[#0e2752] border border-white/[0.08] hover:border-[#ffd100] rounded-lg text-xs font-bold text-slate-100 py-1.5 pl-3 pr-7 focus:outline-none focus:ring-1 focus:ring-[#ffd100] transition-all cursor-pointer"
               >
                 {SAMPLE_PROJECTS.map((preset) => (
                   <option key={preset.id} value={preset.id} className="bg-[#051329] text-white">
@@ -119,27 +112,64 @@ export const Navbar: React.FC<NavbarProps> = ({
                 ))}
                 {currentPresetId === 'custom' && (
                   <option value="custom" className="bg-[#051329] text-[#ffd100]">
-                    ⚡ Custom Paddock Workspace
+                    📁 Custom Local Project
                   </option>
                 )}
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-3 h-3 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
             {/* Folder Picker button */}
             <button
               onClick={onOpenLocalFolder}
-              className="flex items-center gap-1.5 text-xs font-bold bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 px-3 py-2 rounded-xl border border-white/[0.1] hover:border-[#ffd100] transition-all shadow-sm group"
-              title="Inspect local folder from disk via HTML5 File System API"
+              className="flex items-center gap-1.5 text-xs font-bold bg-[#091d3d] hover:bg-[#0e2752] text-slate-200 px-3 py-1.5 rounded-lg border border-white/[0.08] hover:border-[#ffd100] transition-all group"
+              title="Inspect local project folder from your computer"
             >
               <FolderOpen className="w-3.5 h-3.5 text-[#ffd100] group-hover:scale-110 transition-transform" />
               <span className="hidden sm:inline">Open Folder</span>
             </button>
           </div>
-        </div>
 
-        {/* Center: Red Bull Racing Nav Tabs */}
-        <nav className="flex items-center bg-[#071733] p-1.5 rounded-2xl border border-white/[0.1] shadow-inner text-xs order-last lg:order-none w-full lg:w-auto justify-center">
+          {/* Right: Universal Search, Refresh, Export */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Search Palette Button */}
+            <button
+              onClick={onOpenCommandPalette}
+              className="flex items-center gap-2 text-xs font-semibold bg-[#091d3d] hover:bg-[#0e2752] text-slate-200 px-3 py-1.5 rounded-lg border border-white/[0.1] hover:border-[#ffd100] transition-all shadow-sm"
+              title="Quick Search (⌘K / Ctrl+K)"
+            >
+              <Command className="w-3.5 h-3.5 text-[#ffd100]" />
+              <span className="hidden md:inline">Search Everything</span>
+              <kbd className="text-[10px] font-mono bg-black/40 text-[#ffd100] px-1.5 py-0.2 rounded border border-white/[0.08]">
+                ⌘K
+              </kbd>
+            </button>
+
+            {/* Refresh Analysis */}
+            <button
+              onClick={onRefresh}
+              disabled={isScanning}
+              className="p-1.5 rounded-lg bg-[#091d3d] hover:bg-[#0e2752] text-slate-300 hover:text-white border border-white/[0.1] hover:border-[#ffd100] transition-all disabled:opacity-50"
+              title="Re-scan project"
+            >
+              <RefreshCw className={`w-4 h-4 ${isScanning ? 'animate-spin text-[#ffd100]' : ''}`} />
+            </button>
+
+            {/* Export Report in Red Bull Crimson */}
+            <button
+              onClick={onExport}
+              className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider bg-gradient-to-r from-[#e00034] to-[#ff003c] hover:brightness-110 text-white px-3.5 py-1.5 rounded-lg transition-all shadow-rb-red shadow-sm"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Export</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Navigation Bar: Clean, uncluttered tabs */}
+      <div className="max-w-[1780px] mx-auto px-4 lg:px-8 py-2 flex items-center justify-between">
+        <nav className="flex items-center gap-1.5 overflow-x-auto py-0.5 scrollbar-none w-full sm:w-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -148,15 +178,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={tab.id}
                 id={`tab-${tab.id}`}
                 onClick={() => handleTabClick(tab.id)}
-                className={`rb-racing-badge relative flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
+                className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
                   isActive
                     ? 'text-white bg-gradient-to-r from-[#e00034] via-[#ff003c] to-[#c7002e] shadow-rb-red font-extrabold'
-                    : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
+                    : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
                 }`}
+                title={tab.desc}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#ffd100]' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-[#ffd100]' : 'text-slate-400'}`} />
                 <span>{tab.label}</span>
-                <span className={`hidden xl:inline text-[9px] font-mono px-1 py-0.2 rounded font-bold ${isActive ? 'bg-black/30 text-[#ffd100]' : 'bg-white/[0.08] text-slate-400'}`}>
+                <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded font-bold ${
+                  isActive ? 'bg-black/30 text-[#ffd100]' : 'bg-white/[0.08] text-slate-400'
+                }`}>
                   {tab.hotkey}
                 </span>
               </button>
@@ -164,59 +197,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           })}
         </nav>
 
-        {/* Right Actions: Search, Refresh, Export */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          {/* Inline Quick Search */}
-          <div className="relative w-44 sm:w-56">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search telemetry, stack..."
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full bg-[#081b3a] hover:bg-[#0a2145] focus:bg-[#0a2145] border border-white/[0.12] rounded-xl pl-9 pr-7 py-2 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-[#ffd100] focus:ring-1 focus:ring-[#ffd100]/50 transition-all font-sans"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => onSearchChange('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
-              >
-                <X className="w-3 h-3" />
-              </button>
-            )}
-          </div>
-
-          {/* Search Palette Button */}
-          <button
-            onClick={onOpenCommandPalette}
-            className="flex items-center gap-1.5 text-xs font-bold bg-[#091d3d] hover:bg-[#0e2752] text-slate-200 px-3.5 py-2 rounded-xl border border-white/[0.12] hover:border-[#ffd100] transition-all shadow-sm"
-            title="Open universal search palette (⌘K)"
-          >
-            <Command className="w-3.5 h-3.5 text-[#ffd100]" />
-            <span className="hidden sm:inline">Search</span>
-            <kbd className="hidden sm:inline text-[10px] font-mono bg-black/40 text-[#ffd100] px-1.5 py-0.5 rounded border border-white/[0.08]">
-              ⌘K
-            </kbd>
-          </button>
-
-          {/* Refresh Analysis */}
-          <button
-            onClick={onRefresh}
-            disabled={isScanning}
-            className="p-2 rounded-xl bg-[#091d3d] hover:bg-[#0e2752] text-slate-200 hover:text-white border border-white/[0.12] hover:border-[#ffd100] transition-all disabled:opacity-50"
-            title="Re-run telemetry scanner"
-          >
-            <RefreshCw className={`w-4 h-4 ${isScanning ? 'animate-spin text-[#ffd100]' : ''}`} />
-          </button>
-
-          {/* Export Report in Red Bull Crimson */}
-          <button
-            onClick={onExport}
-            className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider bg-gradient-to-r from-[#e00034] to-[#ff003c] hover:brightness-110 text-white px-4 py-2 rounded-xl transition-all shadow-rb-red shadow-md"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export</span>
-          </button>
+        {/* Quick Hint */}
+        <div className="hidden xl:flex items-center gap-2 text-[11px] font-mono text-slate-400">
+          <span>Press</span>
+          <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-200 border border-white/[0.08] font-bold">1</kbd>
+          <span>-</span>
+          <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-200 border border-white/[0.08] font-bold">5</kbd>
+          <span>to switch views</span>
         </div>
       </div>
     </header>
