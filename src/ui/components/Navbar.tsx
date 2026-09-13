@@ -9,8 +9,8 @@ import {
   Download,
   ChevronDown,
   Command,
-  Zap,
-  BookOpen
+  BookOpen,
+  Compass
 } from 'lucide-react';
 import { animate, spring } from 'animejs';
 import { SAMPLE_PROJECTS } from '../presets/sampleProjects';
@@ -41,135 +41,140 @@ export const Navbar: React.FC<NavbarProps> = ({
   onTabChange
 }) => {
   const tabs = [
-    { id: 'graph', label: 'Architecture Map', icon: Layers, hotkey: '1', desc: 'Visual component graph' },
-    { id: 'stack', label: 'Tech Stack & Libraries', icon: Box, hotkey: '2', desc: 'Packages and engines' },
-    { id: 'ai', label: 'AI Assistant Setup', icon: Sparkles, hotkey: '3', desc: 'Rules and MCP tools' },
-    { id: 'files', label: 'Project Files', icon: FolderTree, hotkey: '4', desc: 'Directory structure' },
-    { id: 'explain', label: 'Simple Guide & FAQ', icon: BookOpen, hotkey: '5', desc: 'Everyday analogies' }
+    { id: 'graph', label: 'Architecture & Flow', icon: Layers, hotkey: '1', desc: 'Visual component map and data flow' },
+    { id: 'stack', label: "What It's Made Of", icon: Box, hotkey: '2', desc: 'Frameworks, packages, and libraries' },
+    { id: 'ai', label: 'AI Setup & Configs', icon: Sparkles, hotkey: '3', desc: 'Coding agent rules, MCP tools & secrets' },
+    { id: 'files', label: 'File Structure', icon: FolderTree, hotkey: '4', desc: 'Layered directory explorer' },
+    { id: 'explain', label: 'Plain English Guide', icon: BookOpen, hotkey: '5', desc: 'Everyday analogies and simple FAQ' }
   ] as const;
 
   const handleEmblemClick = () => {
-    animate('#rb-emblem', {
-      rotate: [-12, 12, -6, 6, 0],
-      scale: [1, 1.15, 1],
-      duration: 500,
-      ease: spring({ bounce: 0.6 })
+    animate('#brand-logo', {
+      rotate: [-8, 8, -4, 4, 0],
+      scale: [1, 1.12, 1],
+      duration: 450,
+      ease: spring({ bounce: 0.5 })
     });
   };
 
   const handleTabClick = (tabId: 'graph' | 'stack' | 'ai' | 'files' | 'explain') => {
     onTabChange(tabId);
     animate(`#tab-${tabId}`, {
-      scale: [0.95, 1],
-      duration: 350,
-      ease: spring({ bounce: 0.5 })
+      scale: [0.96, 1],
+      duration: 300,
+      ease: spring({ bounce: 0.4 })
     });
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#051329]/95 backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl transition-all">
-      {/* Top Utility Bar: Brand, Project Switcher, Quick Actions */}
-      <div className="border-b border-white/[0.06] bg-[#040e1f]/90">
+    <header className="sticky top-0 z-40 w-full bg-[#080d1a]/95 backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl transition-all">
+      {/* Top Level: Brand, Prominent Folder Picker, and Actions */}
+      <div className="border-b border-white/[0.06] bg-[#070b16]/90">
         <div className="max-w-[1780px] mx-auto px-4 lg:px-8 py-2.5 flex items-center justify-between gap-4">
-          {/* Brand Logo & Tagline */}
+          {/* Brand Logo & Description */}
           <div className="flex items-center gap-3 shrink-0">
-            <div id="rb-emblem" onClick={handleEmblemClick} className="relative group cursor-pointer" title="ProjectLens">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#e00034] via-[#ff003c] to-[#ffd100] p-[1.5px] shadow-rb-red shadow-md flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
-                <div className="w-full h-full bg-[#051329] rounded-[9px] flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-[#ffd100] fill-[#ffd100] drop-shadow-[0_0_6px_rgba(255,209,0,0.8)]" />
+            <div id="brand-logo" onClick={handleEmblemClick} className="cursor-pointer group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-sky-500 to-emerald-400 p-[1.5px] shadow-lg shadow-indigo-500/20 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-300">
+                <div className="w-full h-full bg-[#080d1a] rounded-[9px] flex items-center justify-center">
+                  <Compass className="w-4 h-4 text-indigo-400 group-hover:rotate-45 transition-transform duration-500" />
                 </div>
               </div>
             </div>
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base tracking-tight text-white font-sans italic">
-                  PROJECT<span className="text-[#e00034]">LENS</span>
+                <span className="font-extrabold text-base tracking-tight text-white font-sans">
+                  Project<span className="text-indigo-400">Lens</span>
                 </span>
-                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-[#e00034]/20 border border-[#e00034]/40 text-[#ff4d6d] font-bold">
-                  WORKSPACE INSPECTOR
+                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 font-bold">
+                  Codebase Inspector
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-medium hidden sm:block">Software Architecture Visualizer & AI Readiness</p>
+              <p className="text-[10px] text-slate-400 font-medium hidden sm:block">
+                Instant Architecture & Tech Stack Intelligence
+              </p>
             </div>
           </div>
 
-          {/* Center: Clean Workspace / Project Picker */}
-          <div className="flex items-center gap-2 bg-[#06142a] p-1 rounded-xl border border-white/[0.1] shadow-inner">
-            <span className="text-[11px] font-mono text-slate-400 font-bold pl-2.5 hidden md:inline">
-              Project:
-            </span>
-            <div className="relative">
-              <select
-                value={currentPresetId}
-                onChange={(e) => onSelectPreset(e.target.value)}
-                className="appearance-none bg-[#091d3d] hover:bg-[#0e2752] border border-white/[0.08] hover:border-[#ffd100] rounded-lg text-xs font-bold text-slate-100 py-1.5 pl-3 pr-7 focus:outline-none focus:ring-1 focus:ring-[#ffd100] transition-all cursor-pointer"
-              >
-                {SAMPLE_PROJECTS.map((preset) => (
-                  <option key={preset.id} value={preset.id} className="bg-[#051329] text-white">
-                    {preset.name}
-                  </option>
-                ))}
-                {currentPresetId === 'custom' && (
-                  <option value="custom" className="bg-[#051329] text-[#ffd100]">
-                    📁 Custom Local Project
-                  </option>
-                )}
-              </select>
-              <ChevronDown className="w-3 h-3 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
-
-            {/* Folder Picker button */}
+          {/* Center: Prominent Local Folder Picker & Demo Select */}
+          <div className="flex items-center gap-2.5">
+            {/* Primary Action: Open Local Folder Button */}
             <button
               onClick={onOpenLocalFolder}
-              className="flex items-center gap-1.5 text-xs font-bold bg-[#091d3d] hover:bg-[#0e2752] text-slate-200 px-3 py-1.5 rounded-lg border border-white/[0.08] hover:border-[#ffd100] transition-all group"
-              title="Inspect local project folder from your computer"
+              className="flex items-center gap-2 text-xs font-bold bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white px-4 py-2 rounded-xl shadow-lg shadow-indigo-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] group cursor-pointer border border-indigo-400/30"
+              title="Inspect any folder on your computer with 100% browser privacy"
             >
-              <FolderOpen className="w-3.5 h-3.5 text-[#ffd100] group-hover:scale-110 transition-transform" />
-              <span className="hidden sm:inline">Open Folder</span>
+              <FolderOpen className="w-4 h-4 text-indigo-200 group-hover:scale-110 transition-transform" />
+              <span>Scan Local Folder</span>
             </button>
+
+            {/* Demo Project Selector */}
+            <div className="flex items-center gap-1.5 bg-[#0e1626] px-2 py-1 rounded-xl border border-white/[0.08]">
+              <span className="text-[11px] font-mono text-slate-400 pl-1.5 hidden md:inline">
+                Demo:
+              </span>
+              <div className="relative">
+                <select
+                  value={currentPresetId}
+                  onChange={(e) => onSelectPreset(e.target.value)}
+                  className="appearance-none bg-[#131d31] hover:bg-[#18243c] border border-white/[0.08] hover:border-indigo-400/50 rounded-lg text-xs font-semibold text-slate-200 py-1.5 pl-2.5 pr-7 focus:outline-none focus:ring-1 focus:ring-indigo-400 transition-all cursor-pointer"
+                >
+                  {SAMPLE_PROJECTS.map((preset) => (
+                    <option key={preset.id} value={preset.id} className="bg-[#0b1220] text-white">
+                      {preset.name}
+                    </option>
+                  ))}
+                  {currentPresetId === 'custom' && (
+                    <option value="custom" className="bg-[#0b1220] text-indigo-300">
+                      📁 Custom Folder
+                    </option>
+                  )}
+                </select>
+                <ChevronDown className="w-3 h-3 text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
           </div>
 
-          {/* Right: Universal Search, Refresh, Export */}
+          {/* Right: Quick Search, Re-scan, Export */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Search Palette Button */}
+            {/* Search Command Palette Trigger */}
             <button
               onClick={onOpenCommandPalette}
-              className="flex items-center gap-2 text-xs font-semibold bg-[#091d3d] hover:bg-[#0e2752] text-slate-200 px-3 py-1.5 rounded-lg border border-white/[0.1] hover:border-[#ffd100] transition-all shadow-sm"
-              title="Quick Search (⌘K / Ctrl+K)"
+              className="flex items-center gap-2 text-xs font-medium bg-[#0e1626] hover:bg-[#141f36] text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-white/[0.08] hover:border-indigo-400/40 transition-all shadow-sm"
+              title="Search components, dependencies, or files (⌘K)"
             >
-              <Command className="w-3.5 h-3.5 text-[#ffd100]" />
-              <span className="hidden md:inline">Search Everything</span>
-              <kbd className="text-[10px] font-mono bg-black/40 text-[#ffd100] px-1.5 py-0.2 rounded border border-white/[0.08]">
+              <Command className="w-3.5 h-3.5 text-indigo-400" />
+              <span className="hidden md:inline">Search</span>
+              <kbd className="text-[10px] font-mono bg-black/40 text-indigo-300 px-1.5 py-0.2 rounded border border-white/[0.08]">
                 ⌘K
               </kbd>
             </button>
 
-            {/* Refresh Analysis */}
+            {/* Refresh Scanner */}
             <button
               onClick={onRefresh}
               disabled={isScanning}
-              className="p-1.5 rounded-lg bg-[#091d3d] hover:bg-[#0e2752] text-slate-300 hover:text-white border border-white/[0.1] hover:border-[#ffd100] transition-all disabled:opacity-50"
-              title="Re-scan project"
+              className="p-2 rounded-lg bg-[#0e1626] hover:bg-[#141f36] text-slate-300 hover:text-white border border-white/[0.08] hover:border-indigo-400/40 transition-all disabled:opacity-50"
+              title="Re-scan current project"
             >
-              <RefreshCw className={`w-4 h-4 ${isScanning ? 'animate-spin text-[#ffd100]' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin text-indigo-400' : ''}`} />
             </button>
 
-            {/* Export Report in Red Bull Crimson */}
+            {/* Export Report */}
             <button
               onClick={onExport}
-              className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider bg-gradient-to-r from-[#e00034] to-[#ff003c] hover:brightness-110 text-white px-3.5 py-1.5 rounded-lg transition-all shadow-rb-red shadow-sm"
+              className="flex items-center gap-1.5 text-xs font-bold bg-[#131d31] hover:bg-[#192742] text-slate-200 hover:text-white px-3.5 py-1.5 rounded-lg border border-white/[0.1] hover:border-white/20 transition-all shadow-sm"
             >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export</span>
+              <Download className="w-3.5 h-3.5 text-slate-300" />
+              <span className="hidden sm:inline">Export</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Bottom Navigation Bar: Clean, uncluttered tabs */}
+      {/* Navigation Tabs Bar */}
       <div className="max-w-[1780px] mx-auto px-4 lg:px-8 py-2 flex items-center justify-between">
-        <nav className="flex items-center gap-1.5 overflow-x-auto py-0.5 scrollbar-none w-full sm:w-auto">
+        <nav className="flex items-center gap-2 overflow-x-auto py-0.5 scrollbar-none w-full sm:w-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -178,17 +183,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={tab.id}
                 id={`tab-${tab.id}`}
                 onClick={() => handleTabClick(tab.id)}
-                className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all shrink-0 ${
                   isActive
-                    ? 'text-white bg-gradient-to-r from-[#e00034] via-[#ff003c] to-[#c7002e] shadow-rb-red font-extrabold'
+                    ? 'text-white bg-indigo-600 shadow-md shadow-indigo-500/30 font-bold'
                     : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
                 }`}
                 title={tab.desc}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-[#ffd100]' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                 <span>{tab.label}</span>
-                <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded font-bold ${
-                  isActive ? 'bg-black/30 text-[#ffd100]' : 'bg-white/[0.08] text-slate-400'
+                <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
+                  isActive ? 'bg-black/30 text-indigo-200' : 'bg-white/[0.08] text-slate-400'
                 }`}>
                   {tab.hotkey}
                 </span>
@@ -197,15 +202,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           })}
         </nav>
 
-        {/* Quick Hint */}
+        {/* Subtle Hotkey Tip */}
         <div className="hidden xl:flex items-center gap-2 text-[11px] font-mono text-slate-400">
           <span>Press</span>
           <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-200 border border-white/[0.08] font-bold">1</kbd>
           <span>-</span>
           <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-200 border border-white/[0.08] font-bold">5</kbd>
-          <span>to switch views</span>
+          <span>for quick navigation</span>
         </div>
       </div>
     </header>
   );
 };
+export default Navbar;

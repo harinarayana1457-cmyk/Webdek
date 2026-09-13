@@ -120,7 +120,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen rb-bg text-slate-100 flex flex-col font-sans selection:bg-[#e00034]/30 selection:text-white circuit-grid">
+    <div className="min-h-screen rb-bg text-slate-100 flex flex-col font-sans selection:bg-indigo-500/30 selection:text-white circuit-grid">
       {/* Top Navbar */}
       <Navbar
         currentPresetId={currentPresetId}
@@ -140,7 +140,7 @@ export function App() {
       <main className="flex-1 flex flex-col">
         {isScanning && !analysisResult ? (
           <div className="flex-1 flex flex-col items-center justify-center p-16 text-slate-400">
-            <Loader2 className="w-9 h-9 text-[#e00034] animate-spin mb-3" />
+            <Loader2 className="w-9 h-9 text-indigo-500 animate-spin mb-3" />
             <p className="text-sm font-mono font-bold text-slate-200">Scanning project files & analyzing software architecture...</p>
           </div>
         ) : analysisResult ? (
@@ -149,7 +149,7 @@ export function App() {
             <OverviewBar data={analysisResult} />
 
             {/* Quick Context & Interaction Tip Banner */}
-            <div className="bg-[#040e1f] border-b border-white/[0.06] px-4 lg:px-8 py-2 flex items-center justify-between text-xs text-slate-400">
+            <div className="bg-slate-900/60 border-b border-slate-800/80 px-4 lg:px-8 py-2 flex items-center justify-between text-xs text-slate-400">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>
@@ -161,7 +161,7 @@ export function App() {
               <div className="hidden md:flex items-center gap-3 text-[11px] text-slate-400 font-mono">
                 <span>💡 Click any card or node to inspect details</span>
                 <span>•</span>
-                <span>Press <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-[#ffd100] border border-white/[0.1] font-bold">⌘K</kbd> to search</span>
+                <span>Press <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-indigo-300 border border-slate-700 font-bold">⌘K</kbd> to search</span>
               </div>
             </div>
 

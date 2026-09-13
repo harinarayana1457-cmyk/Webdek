@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Server,
   KeyRound,
-  AlertTriangle,
   CheckCircle2,
   Copy,
   Check,
@@ -10,7 +9,8 @@ import {
   Bot,
   Terminal,
   ShieldCheck,
-  Lock
+  Lock,
+  Sparkles
 } from 'lucide-react';
 import { animate, spring, stagger } from 'animejs';
 import { useAnimeScope } from '../hooks/useAnimeScope';
@@ -30,46 +30,37 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
     const scoreObj = { val: 0 };
     animate(scoreObj, {
       val: aiConfig.readinessScore,
-      duration: 1000,
+      duration: 800,
       ease: 'out(3)',
       round: 1,
       onUpdate: () => setDisplayScore(scoreObj.val)
     });
 
-    // 2. Horsepower bar fill
+    // 2. Bar fill
     animate('.readiness-bar-fill', {
       width: ['0%', `${aiConfig.readinessScore}%`],
-      duration: 1100,
+      duration: 900,
       ease: 'out(4)'
     });
 
-    // 3. Staggered MCP server cards
+    // 3. Staggered cards
     animate('.mcp-card', {
       opacity: [0, 1],
-      translateY: [15, 0],
-      duration: 500,
-      delay: stagger(45),
-      ease: spring({ bounce: 0.35 })
+      translateY: [10, 0],
+      duration: 400,
+      delay: stagger(35),
+      ease: spring({ bounce: 0.3 })
     });
 
     // 4. Staggered environment keys
     animate('.env-key-item', {
       opacity: [0, 1],
-      translateX: [-10, 0],
-      duration: 400,
-      delay: stagger(25),
+      translateX: [-8, 0],
+      duration: 350,
+      delay: stagger(20),
       ease: 'out(3)'
     });
-
-    // 5. Staggered recommendation alerts
-    animate('.rec-card', {
-      opacity: [0, 1],
-      scale: [0.94, 1],
-      duration: 500,
-      delay: stagger(60, { start: 200 }),
-      ease: spring({ bounce: 0.4 })
-    });
-  }, [aiConfig.readinessScore, aiConfig.mcpServers.length, aiConfig.environmentKeys.length]);
+  }, [aiConfig.readinessScore, aiConfig.mcpServers.length]);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -78,98 +69,95 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
 
     animate(`#copy-${id}`, {
       scale: [1, 1.25, 1],
-      duration: 350,
-      ease: spring({ bounce: 0.6 })
+      duration: 300,
+      ease: spring({ bounce: 0.5 })
     });
   };
 
   return (
     <div ref={root} className="p-4 lg:p-8 space-y-6 max-w-[1780px] mx-auto">
-      {/* Top Pit Wall Hero Banner */}
-      <div className="rb-widget p-6 lg:p-8 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 overflow-hidden">
-        {/* Ambient Red Bull glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-48 bg-gradient-to-r from-[#e00034]/20 via-[#ffd100]/15 to-transparent blur-3xl pointer-events-none" />
-
-        <div className="space-y-2.5 z-10">
+      {/* Hero Banner: AI Readiness */}
+      <div className="rb-widget p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 overflow-hidden">
+        <div className="space-y-2 z-10">
           <div className="flex flex-wrap items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#e00034] to-[#ffd100] p-[2px] shadow-rb-red">
-              <div className="w-full h-full bg-[#051329] rounded-[14px] flex items-center justify-center">
-                <Bot className="w-5 h-5 text-[#ffd100]" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-emerald-400 p-[1.5px] shadow-lg shadow-indigo-500/20">
+              <div className="w-full h-full bg-[#080d1a] rounded-[14px] flex items-center justify-center">
+                <Bot className="w-5 h-5 text-indigo-400" />
               </div>
             </div>
             <div>
-              <span className="text-[10px] uppercase font-mono tracking-widest text-[#ffd100] font-black block">
-                AI ASSISTANT SETUP & CONTEXT DIRECTIVES
+              <span className="text-[10px] uppercase font-mono tracking-widest text-indigo-400 font-bold block">
+                DEVELOPER DIRECTIVES & AI READINESS
               </span>
-              <h2 className="text-xl font-black text-white tracking-tight font-sans italic">
-                AI Agent Context, Rules & MCP Tools
+              <h2 className="text-lg lg:text-xl font-extrabold text-white tracking-tight font-sans">
+                Coding Agent Context & Tool Integration
               </h2>
             </div>
             <span
-              className={`rb-racing-badge px-3.5 py-1 rounded text-xs font-mono font-black border shadow-rb-red ${
+              className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border ${
                 aiConfig.readinessScore >= 80
-                  ? 'bg-[#e00034] text-white border-[#ff003c]'
-                  : 'bg-[#ffd100] text-black border-[#ffb800]'
+                  ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                  : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
               }`}
             >
-              <span>{displayScore}% READINESS SCORE</span>
+              <span>{displayScore}% Readiness Score</span>
             </span>
           </div>
 
-          <p className="text-xs text-slate-300 max-w-3xl leading-relaxed font-medium">
-            Evaluates how thoroughly this codebase equips autonomous agents (Antigravity, Cursor, Claude Code)
-            with architectural guidelines (`.cursorrules`), Model Context Protocol (MCP) server tools, and environment secrets.
+          <p className="text-xs text-slate-300 max-w-3xl leading-relaxed font-normal">
+            Evaluates how prepared this repository is for autonomous AI coding agents (Antigravity, Cursor, Claude Code)
+            with explicit project rules (`.cursorrules`), Model Context Protocol (MCP) tool servers, and environment configuration.
           </p>
         </div>
 
-        {/* Readiness Metric Hub */}
-        <div className="w-full md:w-72 bg-[#040e1f] p-5 rounded-2xl border border-white/[0.1] shrink-0 z-10 shadow-inner">
-          <div className="flex justify-between text-xs font-mono text-slate-300 mb-2">
-            <span className="font-bold">AI Agent Readiness</span>
-            <span className="font-black text-[#ffd100]">{displayScore}%</span>
+        {/* Readiness Meter */}
+        <div className="w-full md:w-64 bg-[#070c18] p-4 rounded-2xl border border-white/[0.08] shrink-0 z-10 shadow-inner">
+          <div className="flex justify-between text-xs font-mono text-slate-300 mb-1.5">
+            <span className="font-semibold">AI Pair Readiness</span>
+            <span className="font-bold text-indigo-400">{displayScore}%</span>
           </div>
 
-          <div className="w-full h-2.5 bg-white/[0.1] rounded-full overflow-hidden mb-3.5">
+          <div className="w-full h-2 bg-white/[0.08] rounded-full overflow-hidden mb-3">
             <div
               className={`readiness-bar-fill h-full ${
                 aiConfig.readinessScore >= 80
-                  ? 'bg-gradient-to-r from-[#ffd100] to-[#e00034]'
-                  : 'bg-gradient-to-r from-[#ffb800] to-[#ffd100]'
+                  ? 'bg-gradient-to-r from-indigo-500 to-emerald-400'
+                  : 'bg-gradient-to-r from-amber-500 to-indigo-500'
               }`}
               style={{ width: '0%' }}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-slate-300">
-            <div className="flex items-center gap-1.5 bg-[#081b3a] p-2 rounded-xl border border-white/[0.08]">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#ffd100]" />
+            <div className="flex items-center gap-1.5 bg-[#0e1626] p-2 rounded-xl border border-white/[0.06]">
+              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
               <span>Rules: {aiConfig.hasCursorRules ? 'Active' : 'None'}</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-[#081b3a] p-2 rounded-xl border border-white/[0.08]">
-              <Server className="w-3.5 h-3.5 text-[#00a3ff]" />
-              <span>MCP: {aiConfig.mcpServers.length} Servers</span>
+            <div className="flex items-center gap-1.5 bg-[#0e1626] p-2 rounded-xl border border-white/[0.06]">
+              <Server className="w-3.5 h-3.5 text-emerald-400" />
+              <span>MCP: {aiConfig.mcpServers.length} Tools</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Grid: MCP Servers & Environment Keys */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* MCP Servers Card */}
-        <div className="rb-widget rounded-3xl p-6 flex flex-col justify-between shadow-2xl">
+      {/* Grid: MCP Tool Servers & Environment Variables */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* MCP Tool Servers */}
+        <div className="rb-widget rounded-3xl p-5 flex flex-col justify-between shadow-xl">
           <div>
-            <div className="flex items-center justify-between mb-4 border-b border-white/[0.08] pb-4">
+            <div className="flex items-center justify-between mb-4 border-b border-white/[0.06] pb-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-[#ffd100]/20 border border-[#ffd100]/40 flex items-center justify-center">
-                  <Server className="w-4 h-4 text-[#ffd100]" />
+                <div className="w-8 h-8 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center">
+                  <Server className="w-4 h-4 text-indigo-400" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-sm text-white italic">Active MCP Telemetry Tool Servers</h3>
-                  <p className="text-[11px] text-slate-400">Model Context Protocol Interfaces</p>
+                  <h3 className="font-bold text-sm text-white">Model Context Protocol (MCP) Tools</h3>
+                  <p className="text-[11px] text-slate-400">Connected database and CLI tools for AI</p>
                 </div>
               </div>
-              <span className="rb-racing-badge text-[10px] font-mono px-3 py-1 rounded bg-[#e00034] text-white font-black shadow-sm">
-                <span>{aiConfig.mcpServers.length} Online</span>
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-indigo-500/15 text-indigo-300 font-bold border border-indigo-500/30">
+                {aiConfig.mcpServers.length} Detected
               </span>
             </div>
 
@@ -178,14 +166,14 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                 {aiConfig.mcpServers.map((server, i) => (
                   <div
                     key={i}
-                    className="mcp-card p-4 rounded-2xl bg-[#040e1f] border border-white/[0.08] space-y-2 hover:border-[#ffd100] transition-colors"
+                    className="mcp-card p-3.5 rounded-2xl bg-[#070c18] border border-white/[0.08] space-y-2 hover:border-indigo-500/50 transition-colors"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-black text-[#ffd100] font-mono flex items-center gap-2">
-                        <Zap className="w-3.5 h-3.5 text-[#e00034]" />
+                      <span className="text-xs font-bold text-white font-mono flex items-center gap-2">
+                        <Zap className="w-3.5 h-3.5 text-indigo-400" />
                         {server.name}
                       </span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/[0.08] text-slate-300">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/[0.06] text-slate-300">
                         {server.type || 'stdio'}
                       </span>
                     </div>
@@ -193,42 +181,42 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                       <p className="text-xs text-slate-300 leading-relaxed">{server.description}</p>
                     )}
                     {server.command && (
-                      <div className="text-[11px] font-mono bg-[#020712] p-2.5 rounded-xl text-slate-200 border border-white/[0.08] overflow-x-auto shadow-inner">
-                        <span className="text-[#ffd100]">$ </span>
+                      <div className="text-[11px] font-mono bg-[#050812] p-2.5 rounded-xl text-slate-200 border border-white/[0.06] overflow-x-auto">
+                        <span className="text-indigo-400">$ </span>
                         <span>{server.command} </span>
-                        <span className="text-[#e00034] font-bold">{server.args?.join(' ')}</span>
+                        <span className="text-emerald-400 font-medium">{server.args?.join(' ')}</span>
                       </div>
                     )}
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="p-10 bg-[#040e1f] rounded-2xl border border-dashed border-white/[0.1] text-slate-400 text-xs text-center font-mono">
-                No MCP tool servers detected in <code>mcp.json</code> or workspace configs.
+              <div className="p-8 bg-[#070c18] rounded-2xl border border-dashed border-white/[0.08] text-slate-400 text-xs text-center font-mono">
+                No custom MCP tool servers detected in workspace configuration.
               </div>
             )}
           </div>
 
-          <div className="mt-5 pt-3.5 border-t border-white/[0.08] text-[11px] text-slate-400 font-mono">
-            Direct tool protocol connecting Antigravity, Claude Code, and Cursor
+          <div className="mt-4 pt-3 border-t border-white/[0.06] text-[11px] text-slate-400 font-mono">
+            Gives AI agents safe tools to test code, query databases, or execute builds
           </div>
         </div>
 
-        {/* Expected Environment Keys Card */}
-        <div className="rb-widget rounded-3xl p-6 flex flex-col justify-between shadow-2xl">
+        {/* Environment Variables & Secrets */}
+        <div className="rb-widget rounded-3xl p-5 flex flex-col justify-between shadow-xl">
           <div>
-            <div className="flex items-center justify-between mb-4 border-b border-white/[0.08] pb-4">
+            <div className="flex items-center justify-between mb-4 border-b border-white/[0.06] pb-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-[#e00034]/20 border border-[#e00034]/40 flex items-center justify-center">
-                  <KeyRound className="w-4 h-4 text-[#e00034]" />
+                <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center">
+                  <KeyRound className="w-4 h-4 text-amber-400" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-sm text-white italic">Environment Telemetry Secrets</h3>
-                  <p className="text-[11px] text-slate-400">Required Secret Variable Keys</p>
+                  <h3 className="font-bold text-sm text-white">Environment Configuration</h3>
+                  <p className="text-[11px] text-slate-400">Required environment keys & secrets</p>
                 </div>
               </div>
-              <span className="rb-racing-badge text-[10px] font-mono px-3 py-1 rounded bg-[#ffd100] text-black font-black">
-                <span>{aiConfig.environmentKeys.length} Variables</span>
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 font-bold border border-amber-500/30">
+                {aiConfig.environmentKeys.length} Variables
               </span>
             </div>
 
@@ -237,11 +225,11 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                 {aiConfig.environmentKeys.map((key, i) => (
                   <div
                     key={i}
-                    className="env-key-item flex items-center justify-between p-3 rounded-2xl bg-[#040e1f] border border-white/[0.08] text-xs font-mono group hover:border-[#ffd100] transition-colors"
+                    className="env-key-item flex items-center justify-between p-2.5 rounded-xl bg-[#070c18] border border-white/[0.08] text-xs font-mono group hover:border-amber-500/50 transition-colors"
                   >
                     <div className="flex items-center gap-2.5 truncate">
-                      <Lock className="w-3.5 h-3.5 text-[#ffd100] shrink-0" />
-                      <span className="text-slate-200 font-bold truncate">{key}</span>
+                      <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span className="text-slate-200 font-semibold truncate">{key}</span>
                     </div>
                     <button
                       id={`copy-key-${i}`}
@@ -250,7 +238,7 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                       title="Copy variable name"
                     >
                       {copiedKey === `key-${i}` ? (
-                        <Check className="w-3.5 h-3.5 text-[#ffd100]" />
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
                       ) : (
                         <Copy className="w-3.5 h-3.5" />
                       )}
@@ -259,28 +247,28 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                 ))}
               </div>
             ) : (
-              <div className="p-10 bg-[#040e1f] rounded-2xl border border-dashed border-white/[0.1] text-slate-400 text-xs text-center font-mono">
-                No <code>.env.example</code> detected in the repository paddock.
+              <div className="p-8 bg-[#070c18] rounded-2xl border border-dashed border-white/[0.08] text-slate-400 text-xs text-center font-mono">
+                No <code>.env.example</code> detected in the workspace root.
               </div>
             )}
           </div>
 
-          <div className="mt-5 pt-3.5 border-t border-white/[0.08] text-[11px] text-slate-400 font-mono">
-            Supplies agent context with variable requirements without exposing live secrets
+          <div className="mt-4 pt-3 border-t border-white/[0.06] text-[11px] text-slate-400 font-mono">
+            Documents required keys without exposing actual private credentials
           </div>
         </div>
       </div>
 
-      {/* Rules & Guidelines Terminal Viewer */}
-      <div className="rb-widget rounded-3xl p-6 shadow-2xl space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
+      {/* Rules & Directives Viewer */}
+      <div className="rb-widget rounded-3xl p-5 shadow-xl space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-white/[0.08] border border-white/[0.1] flex items-center justify-center">
-              <Terminal className="w-4 h-4 text-[#ffd100]" />
+              <Terminal className="w-4 h-4 text-indigo-400" />
             </div>
             <div>
-              <h3 className="font-extrabold text-sm text-white italic">Active Pit Wall Directives & Rule Files</h3>
-              <p className="text-[11px] text-slate-400">Rules governing autonomous race engineer code generation</p>
+              <h3 className="font-bold text-sm text-white">Project Directives & AI Guardrails</h3>
+              <p className="text-[11px] text-slate-400">Rules defining how coding assistants should structure code</p>
             </div>
           </div>
 
@@ -288,52 +276,52 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
             {aiConfig.cursorRulesContent && (
               <button
                 onClick={() => setActiveRuleTab('cursor')}
-                className={`rb-racing-badge px-4 py-1.5 rounded-xl text-xs font-mono font-black transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
                   activeRuleTab === 'cursor'
-                    ? 'bg-[#e00034] text-white shadow-rb-red'
-                    : 'bg-[#040e1f] text-slate-300 hover:text-white border border-white/[0.08]'
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'bg-[#070c18] text-slate-300 hover:text-white border border-white/[0.08]'
                 }`}
               >
-                <span>.cursorrules</span>
+                .cursorrules
               </button>
             )}
             {aiConfig.claudeInstructionsContent && (
               <button
                 onClick={() => setActiveRuleTab('claude')}
-                className={`rb-racing-badge px-4 py-1.5 rounded-xl text-xs font-mono font-black transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
                   activeRuleTab === 'claude'
-                    ? 'bg-[#e00034] text-white shadow-rb-red'
-                    : 'bg-[#040e1f] text-slate-300 hover:text-white border border-white/[0.08]'
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'bg-[#070c18] text-slate-300 hover:text-white border border-white/[0.08]'
                 }`}
               >
-                <span>CLAUDE.md</span>
+                CLAUDE.md
               </button>
             )}
           </div>
         </div>
 
-        {/* Code Content */}
+        {/* Content Viewer */}
         {activeRuleTab === 'cursor' && aiConfig.cursorRulesContent && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono text-slate-300 flex items-center gap-2 font-bold">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#ffd100]" />
+              <span className="text-xs font-mono text-slate-300 flex items-center gap-2 font-medium">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
                 Active .cursorrules configuration:
               </span>
               <button
                 id="copy-cursor"
                 onClick={() => handleCopy(aiConfig.cursorRulesContent || '', 'cursor')}
-                className="flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-[#ffd100] bg-white/[0.08] hover:bg-white/[0.15] px-3 py-1.5 rounded-xl border border-white/[0.1] transition"
+                className="flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-indigo-300 bg-white/[0.08] hover:bg-white/[0.12] px-3 py-1.5 rounded-xl border border-white/[0.08] transition"
               >
                 {copiedKey === 'cursor' ? (
-                  <Check className="w-3.5 h-3.5 text-[#ffd100]" />
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
                 ) : (
                   <Copy className="w-3.5 h-3.5" />
                 )}
-                <span>Copy Directives</span>
+                <span>Copy Rules</span>
               </button>
             </div>
-            <pre className="text-xs font-mono bg-[#020712] text-slate-200 p-5 rounded-2xl border border-white/[0.08] overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-64 shadow-inner">
+            <pre className="text-xs font-mono bg-[#050812] text-slate-200 p-4 rounded-2xl border border-white/[0.08] overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-64">
               {aiConfig.cursorRulesContent}
             </pre>
           </div>
@@ -342,44 +330,44 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
         {activeRuleTab === 'claude' && aiConfig.claudeInstructionsContent && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono text-slate-300 flex items-center gap-2 font-bold">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#e00034]" />
+              <span className="text-xs font-mono text-slate-300 flex items-center gap-2 font-medium">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
                 Active CLAUDE.md guidelines:
               </span>
               <button
                 id="copy-claude"
                 onClick={() => handleCopy(aiConfig.claudeInstructionsContent || '', 'claude')}
-                className="flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-[#ffd100] bg-white/[0.08] hover:bg-white/[0.15] px-3 py-1.5 rounded-xl border border-white/[0.1] transition"
+                className="flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-indigo-300 bg-white/[0.08] hover:bg-white/[0.12] px-3 py-1.5 rounded-xl border border-white/[0.08] transition"
               >
                 {copiedKey === 'claude' ? (
-                  <Check className="w-3.5 h-3.5 text-[#ffd100]" />
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
                 ) : (
                   <Copy className="w-3.5 h-3.5" />
                 )}
-                <span>Copy Directives</span>
+                <span>Copy Guidelines</span>
               </button>
             </div>
-            <pre className="text-xs font-mono bg-[#020712] text-slate-200 p-5 rounded-2xl border border-white/[0.08] overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-64 shadow-inner">
+            <pre className="text-xs font-mono bg-[#050812] text-slate-200 p-4 rounded-2xl border border-white/[0.08] overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-64">
               {aiConfig.claudeInstructionsContent}
             </pre>
           </div>
         )}
       </div>
 
-      {/* Actionable Recommendations */}
+      {/* Recommendations */}
       {aiConfig.recommendations.length > 0 && (
-        <div className="bg-gradient-to-r from-[#21090f]/90 via-[#180a10]/90 to-[#08142b]/90 border border-[#e00034]/40 rounded-3xl p-6 space-y-3.5 shadow-rb-red">
-          <div className="flex items-center gap-2.5 text-[#ffd100] text-xs font-black uppercase tracking-widest font-mono">
-            <AlertTriangle className="w-4 h-4 text-[#e00034]" />
-            <span>Pit Wall Optimization Recommendations</span>
+        <div className="bg-[#0e1626] border border-indigo-500/20 rounded-3xl p-5 space-y-3 shadow-lg">
+          <div className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-wider font-mono">
+            <Sparkles className="w-4 h-4 text-indigo-400" />
+            <span>Recommended Project Improvements</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {aiConfig.recommendations.map((rec, idx) => (
               <div
                 key={idx}
-                className="rec-card text-xs text-slate-200 flex items-start gap-3 bg-[#040e1f] p-4 rounded-2xl border border-white/[0.08] shadow-sm font-medium"
+                className="text-xs text-slate-200 flex items-start gap-2.5 bg-[#070c18] p-3 rounded-xl border border-white/[0.06] font-normal"
               >
-                <span className="w-2 h-2 rounded-full bg-[#e00034] shrink-0 mt-1 shadow-rb-red" />
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0 mt-1.5" />
                 <span className="leading-relaxed">{rec}</span>
               </div>
             ))}
@@ -389,3 +377,4 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
     </div>
   );
 };
+export default AIContextInspector;
