@@ -11,7 +11,8 @@ import {
   ChevronDown,
   X,
   Command,
-  Zap
+  Zap,
+  BookOpen
 } from 'lucide-react';
 import { animate, spring } from 'animejs';
 import { SAMPLE_PROJECTS } from '../presets/sampleProjects';
@@ -26,8 +27,8 @@ interface NavbarProps {
   onSearchChange: (q: string) => void;
   onOpenCommandPalette: () => void;
   isScanning: boolean;
-  activeTab: 'graph' | 'stack' | 'ai' | 'files';
-  onTabChange: (tab: 'graph' | 'stack' | 'ai' | 'files') => void;
+  activeTab: 'graph' | 'stack' | 'ai' | 'files' | 'explain';
+  onTabChange: (tab: 'graph' | 'stack' | 'ai' | 'files' | 'explain') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -47,7 +48,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'graph', label: 'Telemetry Flow', icon: Layers, hotkey: '1' },
     { id: 'stack', label: 'Power Unit & Stack', icon: Box, hotkey: '2' },
     { id: 'ai', label: 'Pit Wall AI', icon: Sparkles, hotkey: '3' },
-    { id: 'files', label: 'Paddock Files', icon: FolderTree, hotkey: '4' }
+    { id: 'files', label: 'Paddock Files', icon: FolderTree, hotkey: '4' },
+    { id: 'explain', label: 'Plain English Guide', icon: BookOpen, hotkey: '5' }
   ] as const;
 
   const handleEmblemClick = () => {
@@ -59,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     });
   };
 
-  const handleTabClick = (tabId: 'graph' | 'stack' | 'ai' | 'files') => {
+  const handleTabClick = (tabId: 'graph' | 'stack' | 'ai' | 'files' | 'explain') => {
     onTabChange(tabId);
     animate(`#tab-${tabId}`, {
       scale: [0.93, 1],

@@ -5,6 +5,7 @@ import { ArchitectureGraph } from './ui/components/ArchitectureGraph';
 import { WhyThisStackDrawer } from './ui/components/WhyThisStackDrawer';
 import { AIContextInspector } from './ui/components/AIContextInspector';
 import { DirectoryExplorer } from './ui/components/DirectoryExplorer';
+import { SimpleConceptsExplainer } from './ui/components/SimpleConceptsExplainer';
 import { ExportModal } from './ui/components/ExportModal';
 import { CommandPalette } from './ui/components/CommandPalette';
 import { getPresetFileSystem } from './ui/presets/sampleProjects';
@@ -16,7 +17,7 @@ import { Loader2 } from 'lucide-react';
 
 export function App() {
   const [currentPresetId, setCurrentPresetId] = useState<string>('nextjs-ai-store');
-  const [activeTab, setActiveTab] = useState<'graph' | 'stack' | 'ai' | 'files'>('graph');
+  const [activeTab, setActiveTab] = useState<'graph' | 'stack' | 'ai' | 'files' | 'explain'>('graph');
   const [searchQuery, setSearchQuery] = useState('');
   const [isScanning, setIsScanning] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<ProjectAnalysisResult | null>(null);
@@ -64,17 +65,33 @@ export function App() {
     return () => unsubscribe();
   }, [analyzeWorkspace]);
 
-  // Global hotkey ⌘K / Ctrl+K
+  // Global hotkeys ⌘K / Ctrl+K and 1-5 tab switching
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setIsCommandPaletteOpen((prev) => !prev);
+        return;
+      }
+
+      // Quick numbers 1-5 tab switching if not typing in input or modal
+      const activeEl = document.activeElement;
+      const isTyping =
+        activeEl?.tagName === 'INPUT' ||
+        activeEl?.tagName === 'TEXTAREA' ||
+        activeEl?.getAttribute('contenteditable') === 'true';
+
+      if (!isTyping && !isCommandPaletteOpen && !isExportOpen) {
+        if (e.key === '1') setActiveTab('graph');
+        if (e.key === '2') setActiveTab('stack');
+        if (e.key === '3') setActiveTab('ai');
+        if (e.key === '4') setActiveTab('files');
+        if (e.key === '5') setActiveTab('explain');
       }
     };
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, []);
+  }, [isCommandPaletteOpen, isExportOpen]);
 
   const handleSelectPreset = (presetId: string) => {
     setCurrentPresetId(presetId);
@@ -157,6 +174,10 @@ export function App() {
                   layers={analysisResult.architecture.layers}
                   allFiles={analysisResult.architecture.layers.flatMap((l) => l.filePaths)}
                 />
+              )}
+
+              {activeTab === 'explain' && (
+                <SimpleConceptsExplainer data={analysisResult} />
               )}
             </div>
           </>

@@ -8,7 +8,8 @@ import {
   ArrowRight,
   CornerDownLeft,
   Tag,
-  Zap
+  Zap,
+  BookOpen
 } from 'lucide-react';
 import { animate, spring, stagger } from 'animejs';
 import { useAnimeScope } from '../hooks/useAnimeScope';
@@ -18,7 +19,7 @@ interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
   data: ProjectAnalysisResult;
-  onNavigateTab: (tab: 'graph' | 'stack' | 'ai' | 'files') => void;
+  onNavigateTab: (tab: 'graph' | 'stack' | 'ai' | 'files' | 'explain') => void;
   onSelectStackItem?: (name: string) => void;
   onSelectNode?: (nodeId: string) => void;
 }
@@ -81,6 +82,48 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const q = query.toLowerCase().trim();
 
+  // Quick navigation shortcuts
+  const navShortcuts = [
+    {
+      id: 'explain' as const,
+      label: 'Plain English Guide & Simple Concepts',
+      desc: 'Relatable analogies (F1, Restaurant) and jargon-free FAQ',
+      icon: BookOpen,
+      badge: 'NEW GUIDE',
+      keywords: 'explain guide plain english simple beginner faq help concepts analogy'
+    },
+    {
+      id: 'graph' as const,
+      label: 'Telemetry Flow Graph',
+      desc: 'Interactive visual circuit diagram of modules',
+      icon: Layers,
+      badge: 'TAB 1',
+      keywords: 'graph circuit flow visual modules telemetry nodes'
+    },
+    {
+      id: 'stack' as const,
+      label: 'Power Unit & Tech Stack',
+      desc: 'Inspect packages, dependencies, and engines',
+      icon: Box,
+      badge: 'TAB 2',
+      keywords: 'stack dependencies power unit packages runtime framework'
+    },
+    {
+      id: 'ai' as const,
+      label: 'Pit Wall AI & MCP Inspector',
+      desc: 'Inspect AI readiness score, .cursorrules, and MCP tools',
+      icon: Zap,
+      badge: 'TAB 3',
+      keywords: 'ai mcp rules cursor pit wall prompt agent'
+    }
+  ].filter(
+    (item) =>
+      !q ||
+      item.label.toLowerCase().includes(q) ||
+      item.desc.toLowerCase().includes(q) ||
+      item.keywords.toLowerCase().includes(q)
+  );
+
   // 1. Filter dependencies
   const matchedDeps = data.dependencies
     .filter((d) => !q || d.name.toLowerCase().includes(q) || d.purpose.toLowerCase().includes(q) || d.category.toLowerCase().includes(q))
@@ -132,6 +175,52 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
         {/* Results List */}
         <div className="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+          {/* Quick Navigation Destinations */}
+          {navShortcuts.length > 0 && (
+            <div className="space-y-1.5">
+              <div className="px-2 text-[10px] font-mono uppercase font-bold text-[#ffd100] flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-[#ffd100]" />
+                <span>Jump To View ({navShortcuts.length})</span>
+              </div>
+              {navShortcuts.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => {
+                      onNavigateTab(item.id);
+                      onClose();
+                    }}
+                    className="palette-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[#0e2447] cursor-pointer border border-transparent hover:border-[#ffd100]/40 transition group"
+                  >
+                    <div className="flex items-center gap-2.5 truncate">
+                      <div className="w-7 h-7 rounded-lg bg-[#ffd100]/15 border border-[#ffd100]/30 text-[#ffd100] flex items-center justify-center font-bold shrink-0">
+                        <Icon className="w-3.5 h-3.5 text-[#ffd100]" />
+                      </div>
+                      <div className="truncate">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-white group-hover:text-[#ffd100] transition truncate font-sans">
+                            {item.label}
+                          </span>
+                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-[#e00034] text-white font-extrabold">
+                            {item.badge}
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-slate-400 truncate block">
+                          {item.desc}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0 text-[#ffd100] text-[11px] font-bold opacity-0 group-hover:opacity-100 transition">
+                      <span>Jump</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           {/* Architecture Modules */}
           {matchedNodes.length > 0 && (
             <div className="space-y-1.5">
@@ -244,7 +333,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             </div>
           )}
 
-          {matchedNodes.length === 0 && matchedDeps.length === 0 && matchedFiles.length === 0 && (
+          {matchedNodes.length === 0 && matchedDeps.length === 0 && matchedFiles.length === 0 && navShortcuts.length === 0 && (
             <div className="p-8 text-center text-slate-400">
               <p className="text-xs font-mono">No telemetry components found for "{query}"</p>
             </div>
