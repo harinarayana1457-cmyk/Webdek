@@ -10,6 +10,8 @@ import {
   FolderTree,
   Zap
 } from 'lucide-react';
+import { animate, spring, stagger } from 'animejs';
+import { useAnimeScope } from '../hooks/useAnimeScope';
 import { ArchitectureLayer } from '../../engine/types';
 
 interface DirectoryExplorerProps {
@@ -23,6 +25,26 @@ export const DirectoryExplorer: React.FC<DirectoryExplorerProps> = ({ layers, al
   });
   const [copiedFile, setCopiedFile] = useState<string | null>(null);
 
+  const { root } = useAnimeScope(() => {
+    // Staggered layer card entrances
+    animate('.layer-card', {
+      opacity: [0, 1],
+      translateY: [15, 0],
+      duration: 500,
+      delay: stagger(40),
+      ease: spring({ bounce: 0.35 })
+    });
+
+    // Staggered file rows
+    animate('.file-row', {
+      opacity: [0, 1],
+      translateX: [-8, 0],
+      duration: 300,
+      delay: stagger(15),
+      ease: 'out(3)'
+    });
+  }, [layers.length, expandedLayers]);
+
   const toggleLayer = (name: string) => {
     setExpandedLayers((prev) => ({ ...prev, [name]: !prev[name] }));
   };
@@ -31,6 +53,12 @@ export const DirectoryExplorer: React.FC<DirectoryExplorerProps> = ({ layers, al
     navigator.clipboard.writeText(path);
     setCopiedFile(path);
     setTimeout(() => setCopiedFile(null), 1500);
+
+    animate(`#copy-file-${path.replace(/[^a-zA-Z0-9]/g, '-')}`, {
+      scale: [1, 1.3, 1],
+      duration: 300,
+      ease: spring({ bounce: 0.6 })
+    });
   };
 
   const getFileIcon = (path: string) => {
@@ -43,7 +71,7 @@ export const DirectoryExplorer: React.FC<DirectoryExplorerProps> = ({ layers, al
   };
 
   return (
-    <div className="p-4 lg:p-8 space-y-6 max-w-[1780px] mx-auto">
+    <div ref={root} className="p-4 lg:p-8 space-y-6 max-w-[1780px] mx-auto">
       {/* Header Hub */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rb-widget p-5 rounded-2xl">
         <div className="flex items-center gap-3.5">
@@ -78,7 +106,7 @@ export const DirectoryExplorer: React.FC<DirectoryExplorerProps> = ({ layers, al
           return (
             <div
               key={layer.name}
-              className="rb-widget rounded-2xl overflow-hidden transition-all duration-200"
+              className="layer-card rb-widget rounded-2xl overflow-hidden transition-all duration-200"
             >
               {/* Header Trigger */}
               <button
@@ -120,7 +148,7 @@ export const DirectoryExplorer: React.FC<DirectoryExplorerProps> = ({ layers, al
                     layer.filePaths.map((filePath, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between py-2 px-3.5 rounded-xl hover:bg-[#0e2447] text-slate-300 hover:text-white group transition-all border border-transparent hover:border-[#e00034]/40"
+                        className="file-row flex items-center justify-between py-2 px-3.5 rounded-xl hover:bg-[#0e2447] text-slate-300 hover:text-white group transition-all border border-transparent hover:border-[#e00034]/40"
                       >
                         <div className="flex items-center gap-3 truncate">
                           {getFileIcon(filePath)}
@@ -130,6 +158,7 @@ export const DirectoryExplorer: React.FC<DirectoryExplorerProps> = ({ layers, al
                         </div>
 
                         <button
+                          id={`copy-file-${filePath.replace(/[^a-zA-Z0-9]/g, '-')}`}
                           onClick={() => handleCopy(filePath)}
                           className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 text-slate-400 hover:text-[#ffd100] rounded-lg hover:bg-white/10"
                           title="Copy file path"

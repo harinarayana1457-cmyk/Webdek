@@ -7,8 +7,11 @@ import {
   ArrowUpDown,
   Copy,
   Check,
-  Flame
+  Flame,
+  Zap
 } from 'lucide-react';
+import { animate, spring, stagger } from 'animejs';
+import { useAnimeScope } from '../hooks/useAnimeScope';
 import { DetectedDependency, TechCategory } from '../../engine/types';
 
 interface WhyThisStackDrawerProps {
@@ -63,10 +66,41 @@ export const WhyThisStackDrawer: React.FC<WhyThisStackDrawerProps> = ({
     return a.name.localeCompare(b.name);
   });
 
+  // Anime.js scope for stack card cascades and horsepower bars
+  const { root } = useAnimeScope(() => {
+    // 1. Staggered card cascade
+    animate('.stack-card', {
+      opacity: [0, 1],
+      translateY: [20, 0],
+      scale: [0.96, 1],
+      duration: 500,
+      delay: stagger(35, { from: 'first' }),
+      ease: spring({ bounce: 0.35 })
+    });
+
+    // 2. Horsepower progress bars
+    const fills = root.current?.querySelectorAll<HTMLElement>('.horsepower-fill');
+    fills?.forEach((el, idx) => {
+      const targetWidth = el.getAttribute('data-width') || '100%';
+      animate(el, {
+        width: ['0%', targetWidth],
+        duration: 750,
+        delay: 100 + idx * 35,
+        ease: 'out(3)'
+      });
+    });
+  }, [activeCategory, sortBy, searchQuery, dependencies.length]);
+
   const handleCopy = (pkgName: string) => {
     navigator.clipboard.writeText(pkgName);
     setCopiedPkg(pkgName);
     setTimeout(() => setCopiedPkg(null), 1500);
+
+    animate(`#copy-${pkgName.replace(/[^a-zA-Z0-9]/g, '-')}`, {
+      scale: [1, 1.25, 1],
+      duration: 350,
+      ease: spring({ bounce: 0.6 })
+    });
   };
 
   const getLevelBadge = (level: string) => {
@@ -82,8 +116,17 @@ export const WhyThisStackDrawer: React.FC<WhyThisStackDrawerProps> = ({
     }
   };
 
+  const getHorsepowerPct = (level: string) => {
+    switch (level) {
+      case 'critical': return '95%';
+      case 'high': return '75%';
+      case 'medium': return '50%';
+      default: return '30%';
+    }
+  };
+
   return (
-    <div className="p-4 lg:p-8 space-y-6 max-w-[1780px] mx-auto">
+    <div ref={root} className="p-4 lg:p-8 space-y-6 max-w-[1780px] mx-auto">
       {/* Category Pills & Filter Hub */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-[#081b3a] p-4 rounded-2xl border border-white/[0.1] shadow-2xl backdrop-blur-xl">
         {/* Category Pills */}
@@ -141,7 +184,7 @@ export const WhyThisStackDrawer: React.FC<WhyThisStackDrawerProps> = ({
         {sorted.map((dep, index) => (
           <div
             key={`${dep.name}-${index}`}
-            className="rb-widget rounded-3xl p-6 flex flex-col justify-between group overflow-hidden"
+            className="stack-card rb-widget rounded-3xl p-6 flex flex-col justify-between group overflow-hidden"
           >
             <div>
               {/* Header */}
@@ -155,6 +198,7 @@ export const WhyThisStackDrawer: React.FC<WhyThisStackDrawerProps> = ({
                       {dep.version || 'installed'}
                     </span>
                     <button
+                      id={`copy-${dep.name.replace(/[^a-zA-Z0-9]/g, '-')}`}
                       onClick={() => handleCopy(dep.name)}
                       className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/[0.1] rounded-md text-slate-300 hover:text-white"
                       title="Copy package name"
@@ -199,6 +243,24 @@ export const WhyThisStackDrawer: React.FC<WhyThisStackDrawerProps> = ({
                       Telemetry Verified
                     </span>
                   )}
+                </div>
+              </div>
+
+              {/* Horsepower / Impact Progress Bar */}
+              <div className="mb-4 bg-[#040e1f] p-3 rounded-2xl border border-white/[0.06]">
+                <div className="flex items-center justify-between text-[10px] font-mono text-slate-300 mb-1.5 font-bold">
+                  <span className="flex items-center gap-1.5 text-[#ffd100]">
+                    <Zap className="w-3.5 h-3.5 text-[#ffd100]" />
+                    POWER UNIT CAPABILITY
+                  </span>
+                  <span className="text-white font-extrabold">{getHorsepowerPct(dep.level)}</span>
+                </div>
+                <div className="w-full h-2 rounded-full bg-white/[0.08] overflow-hidden">
+                  <div
+                    className="horsepower-fill h-full rounded-full bg-gradient-to-r from-[#e00034] via-[#ff003c] to-[#ffd100] shadow-rb-red"
+                    data-width={getHorsepowerPct(dep.level)}
+                    style={{ width: '0%' }}
+                  />
                 </div>
               </div>
 

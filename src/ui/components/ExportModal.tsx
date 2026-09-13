@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { X, Copy, Check, Download, FileText, Code2 } from 'lucide-react';
+import { animate, spring } from 'animejs';
+import { useAnimeScope } from '../hooks/useAnimeScope';
 import { ProjectAnalysisResult } from '../../engine/types';
 
 interface ExportModalProps {
@@ -11,6 +13,18 @@ interface ExportModalProps {
 export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, data }) => {
   const [format, setFormat] = useState<'markdown' | 'json'>('markdown');
   const [copied, setCopied] = useState(false);
+
+  const { root } = useAnimeScope(() => {
+    if (!isOpen) return;
+
+    animate('.export-modal-card', {
+      scale: [0.93, 1],
+      opacity: [0, 1],
+      translateY: [-15, 0],
+      duration: 400,
+      ease: spring({ bounce: 0.35 })
+    });
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -79,8 +93,8 @@ ${data.aiConfig.recommendations.map((r) => `- ${r}`).join('\n') || '- None: full
   };
 
   return (
-    <div className="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-[#091c38] border border-white/10 rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden relative">
+    <div ref={root} className="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+      <div className="export-modal-card bg-[#091c38] border border-white/10 rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden relative">
         {/* Top Racing Stripe */}
         <div className="h-1 w-full bg-gradient-to-r from-[#e00034] via-[#ffd100] to-transparent" />
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Cpu,
   Boxes,
@@ -13,6 +13,8 @@ import {
   Radio,
   Flame
 } from 'lucide-react';
+import { animate, spring, stagger } from 'animejs';
+import { useAnimeScope } from '../hooks/useAnimeScope';
 import { ProjectAnalysisResult } from '../../engine/types';
 
 interface OverviewBarProps {
@@ -33,43 +35,104 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
   } = data;
 
   const flowSteps = architecture.dataFlowSummary.split('->').map((s) => s.trim());
+  const [displayScore, setDisplayScore] = useState(0);
+  const [displayConfidence, setDisplayConfidence] = useState(0);
+
+  const { root } = useAnimeScope(() => {
+    // 1. Telemetry numerical counters
+    const scoreObj = { val: 0 };
+    animate(scoreObj, {
+      val: aiConfig.readinessScore,
+      duration: 1200,
+      ease: 'out(3)',
+      round: 1,
+      onUpdate: () => setDisplayScore(scoreObj.val)
+    });
+
+    const confObj = { val: 0 };
+    animate(confObj, {
+      val: architecture.confidence,
+      duration: 1000,
+      ease: 'out(3)',
+      round: 1,
+      onUpdate: () => setDisplayConfidence(confObj.val)
+    });
+
+    // 2. Power capsules staggered entrance
+    animate('.power-capsule', {
+      opacity: [0, 1],
+      translateY: [-10, 0],
+      duration: 500,
+      delay: stagger(40),
+      ease: 'out(4)'
+    });
+
+    // 3. Sector chips staggered spring entry
+    animate('.sector-chip', {
+      opacity: [0, 1],
+      scale: [0.88, 1],
+      duration: 600,
+      delay: stagger(50, { start: 150 }),
+      ease: spring({ bounce: 0.35 })
+    });
+
+    // 4. Execution checkpoints
+    animate('.checkpoint-item', {
+      opacity: [0, 1],
+      translateX: [-12, 0],
+      duration: 400,
+      delay: stagger(70, { start: 250 }),
+      ease: 'out(3)'
+    });
+
+    // 5. Dial stroke dashoffset rev-up
+    const circumference = 2 * Math.PI * 26;
+    const targetOffset = circumference - (aiConfig.readinessScore / 100) * circumference;
+    animate('.dial-ring', {
+      strokeDashoffset: [circumference, targetOffset],
+      duration: 1200,
+      ease: 'out(4)'
+    });
+  }, [data.projectName, aiConfig.readinessScore, architecture.confidence]);
+
+  const circumference = 2 * Math.PI * 26;
 
   return (
-    <div className="border-b border-white/[0.08] bg-gradient-to-b from-[#051329] via-[#040f21] to-[#030b17] px-4 lg:px-8 py-5 relative">
+    <div ref={root} className="border-b border-white/[0.08] bg-gradient-to-b from-[#051329] via-[#040f21] to-[#030b17] px-4 lg:px-8 py-5 relative">
       <div className="max-w-[1780px] mx-auto space-y-4">
         {/* Top Power-Unit Capsules */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Framework */}
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group">
+            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
               <Boxes className="w-4 h-4 text-[#ffd100] group-hover:scale-110 transition-transform" />
               <span className="text-slate-400 text-[11px] font-sans">Framework:</span>
               <span className="font-extrabold text-white tracking-tight font-mono">{primaryFramework}</span>
             </div>
 
             {/* Runtime */}
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group">
+            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
               <Cpu className="w-4 h-4 text-[#00a3ff] group-hover:scale-110 transition-transform" />
               <span className="text-slate-400 text-[11px] font-sans">Runtime:</span>
               <span className="font-extrabold text-white tracking-tight font-mono">{primaryRuntime}</span>
             </div>
 
             {/* Styling */}
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group">
+            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
               <Palette className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
               <span className="text-slate-400 text-[11px] font-sans">Styling:</span>
               <span className="font-extrabold text-white tracking-tight font-mono">{stylingEngine}</span>
             </div>
 
             {/* State Management */}
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group">
+            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-white/[0.1] hover:border-[#ffd100] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
               <Database className="w-4 h-4 text-[#ffd100] group-hover:scale-110 transition-transform" />
               <span className="text-slate-400 text-[11px] font-sans">State:</span>
               <span className="font-extrabold text-white tracking-tight font-mono">{stateLayer}</span>
             </div>
 
             {/* AI Layer */}
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-[#e00034]/40 hover:border-[#e00034] text-xs font-semibold text-white shadow-sm transition-all group">
+            <div className="power-capsule flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#091d3d] border border-[#e00034]/40 hover:border-[#e00034] text-xs font-semibold text-white shadow-sm transition-all group cursor-default">
               <Flame className="w-4 h-4 text-[#e00034] group-hover:scale-110 transition-transform" />
               <span className="text-slate-400 text-[11px] font-sans">AI Layer:</span>
               <span className="font-extrabold text-[#ffd100] tracking-tight font-mono">{aiLayer}</span>
@@ -123,7 +186,7 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
                 <div className="flex items-center gap-2">
                   <span className="rb-racing-badge text-xs font-mono font-black px-3.5 py-1 rounded bg-[#e00034] text-white shadow-rb-red flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>{architecture.confidence}% TELEMETRY MATCH</span>
+                    <span>{displayConfidence}% TELEMETRY MATCH</span>
                   </span>
                 </div>
               </div>
@@ -146,7 +209,7 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
               <div className="flex flex-wrap items-center gap-2 overflow-x-auto py-1">
                 {flowSteps.map((step, idx) => (
                   <React.Fragment key={idx}>
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#06142a] border border-white/[0.1] text-[11px] font-mono text-slate-200 shadow-inner hover:border-[#ffd100] hover:text-white transition-all cursor-default group/sector">
+                    <div className="sector-chip flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#06142a] border border-white/[0.1] text-[11px] font-mono text-slate-200 shadow-inner hover:border-[#ffd100] hover:text-white transition-all cursor-default group/sector">
                       <span className="w-2 h-2 rounded-full bg-[#e00034] group-hover/sector:bg-[#ffd100] transition-colors shadow-rb-red" />
                       <span className="font-bold">Sector {idx + 1}:</span>
                       <span>{step}</span>
@@ -192,16 +255,16 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
                     r="26"
                     stroke={aiConfig.readinessScore >= 80 ? '#e00034' : '#ffd100'}
                     strokeWidth="5"
-                    strokeDasharray={2 * Math.PI * 26}
-                    strokeDashoffset={2 * Math.PI * 26 - (aiConfig.readinessScore / 100) * (2 * Math.PI * 26)}
+                    strokeDasharray={circumference}
+                    strokeDashoffset={circumference}
                     strokeLinecap="round"
                     fill="transparent"
-                    className="transition-all duration-1000 ease-out shadow-rb-red"
+                    className="dial-ring shadow-rb-red"
                   />
                 </svg>
                 <div className="absolute flex flex-col items-center justify-center">
                   <span className="font-mono text-xs font-black text-white">
-                    {aiConfig.readinessScore}%
+                    {displayScore}%
                   </span>
                   <span className="text-[8px] font-mono text-[#ffd100] uppercase font-bold">RPM</span>
                 </div>
@@ -216,7 +279,7 @@ export const OverviewBar: React.FC<OverviewBarProps> = ({ data }) => {
               </div>
 
               {architecture.lifecycleSequence.slice(0, 3).map((step, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs">
+                <div key={idx} className="checkpoint-item flex items-start gap-2.5 text-xs">
                   <span className="text-[10px] font-mono font-extrabold text-white bg-[#e00034] px-1.5 py-0.2 rounded shrink-0 mt-0.5 shadow-sm">
                     P{idx + 1}
                   </span>

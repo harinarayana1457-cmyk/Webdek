@@ -13,6 +13,7 @@ import {
   Command,
   Zap
 } from 'lucide-react';
+import { animate, spring } from 'animejs';
 import { SAMPLE_PROJECTS } from '../presets/sampleProjects';
 
 interface NavbarProps {
@@ -49,6 +50,24 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'files', label: 'Paddock Files', icon: FolderTree, hotkey: '4' }
   ] as const;
 
+  const handleEmblemClick = () => {
+    animate('#rb-emblem', {
+      rotate: [-12, 12, -6, 6, 0],
+      scale: [1, 1.15, 1],
+      duration: 500,
+      ease: spring({ bounce: 0.6 })
+    });
+  };
+
+  const handleTabClick = (tabId: 'graph' | 'stack' | 'ai' | 'files') => {
+    onTabChange(tabId);
+    animate(`#tab-${tabId}`, {
+      scale: [0.93, 1],
+      duration: 350,
+      ease: spring({ bounce: 0.5 })
+    });
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full bg-[#051329]/95 backdrop-blur-2xl border-b-2 border-[#e00034] shadow-2xl transition-all">
       <div className="max-w-[1780px] mx-auto px-4 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
@@ -56,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-4 shrink-0">
           <div className="flex items-center gap-3">
             {/* Red Bull Style Emblem */}
-            <div className="relative group cursor-pointer">
+            <div id="rb-emblem" onClick={handleEmblemClick} className="relative group cursor-pointer">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#e00034] via-[#ff003c] to-[#ffd100] p-[1.5px] shadow-rb-red shadow-lg flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
                 <div className="w-full h-full bg-[#051329] rounded-[9px] flex items-center justify-center relative overflow-hidden">
                   <Zap className="w-5 h-5 text-[#ffd100] fill-[#ffd100] drop-shadow-[0_0_8px_rgba(255,209,0,0.8)]" />
@@ -125,7 +144,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             return (
               <button
                 key={tab.id}
-                onClick={() => onTabChange(tab.id)}
+                id={`tab-${tab.id}`}
+                onClick={() => handleTabClick(tab.id)}
                 className={`rb-racing-badge relative flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
                   isActive
                     ? 'text-white bg-gradient-to-r from-[#e00034] via-[#ff003c] to-[#c7002e] shadow-rb-red font-extrabold'

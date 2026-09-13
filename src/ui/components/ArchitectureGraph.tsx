@@ -16,6 +16,8 @@ import {
   CheckCircle2,
   Flag
 } from 'lucide-react';
+import { animate, spring, stagger } from 'animejs';
+import { useAnimeScope } from '../hooks/useAnimeScope';
 import { ArchitectureGraph as IArchitectureGraph, GraphNode } from '../../engine/types';
 
 interface ArchitectureGraphProps {
@@ -35,6 +37,40 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
   const [filterLayer, setFilterLayer] = useState<string>('all');
 
   const selectedNode = graph.nodes.find((n) => n.id === selectedNodeId);
+
+  // Anime.js scope for circuit animations
+  const { root } = useAnimeScope(() => {
+    // 1. Staggered node deployment
+    animate('.circuit-node', {
+      opacity: [0, 1],
+      scale: [0.88, 1],
+      translateY: [15, 0],
+      duration: 550,
+      delay: stagger(45, { from: 'first' }),
+      ease: spring({ bounce: 0.4 })
+    });
+
+    // 2. Wire edge feeds entrance
+    animate('.circuit-edge-badge', {
+      opacity: [0, 1],
+      scale: [0.9, 1],
+      duration: 400,
+      delay: stagger(25, { start: 200 }),
+      ease: 'out(3)'
+    });
+  }, [graph.nodes.length, filterLayer, zoomLevel]);
+
+  const handleNodeClick = (node: GraphNode) => {
+    setSelectedNodeId(node.id);
+    if (onSelectNode) onSelectNode(node);
+
+    // Trigger spring shockwave bounce on clicked node
+    animate(`#node-${node.id}`, {
+      scale: [1, 1.06, 1],
+      duration: 400,
+      ease: spring({ bounce: 0.55 })
+    });
+  };
 
   // Icon mapping
   const getNodeIcon = (type: GraphNode['type']) => {
@@ -76,7 +112,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
   const q = searchQuery.toLowerCase().trim();
 
   return (
-    <div className="p-4 lg:p-8 space-y-5 max-w-[1780px] mx-auto">
+    <div ref={root} className="p-4 lg:p-8 space-y-5 max-w-[1780px] mx-auto">
       {/* Circuit Telemetry Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#081b3a] p-4 rounded-2xl border border-white/[0.1] shadow-2xl backdrop-blur-xl">
         <div className="flex items-center gap-3">
@@ -211,13 +247,11 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
                       return (
                         <div
                           key={node.id}
-                          onClick={() => {
-                            setSelectedNodeId(node.id);
-                            if (onSelectNode) onSelectNode(node);
-                          }}
+                          id={`node-${node.id}`}
+                          onClick={() => handleNodeClick(node)}
                           onMouseEnter={() => setHoveredNodeId(node.id)}
                           onMouseLeave={() => setHoveredNodeId(null)}
-                          className={`relative p-5 rounded-2xl border transition-all duration-300 cursor-pointer select-none rb-widget ${
+                          className={`circuit-node relative p-5 rounded-2xl border transition-all duration-300 cursor-pointer select-none rb-widget ${
                             isSelected
                               ? '!border-[#e00034] ring-2 ring-[#e00034]/50 shadow-rb-red scale-[1.02] !bg-[#0b1d3d]'
                               : isMatchingSearch && isConnected
@@ -292,7 +326,7 @@ export const ArchitectureGraph: React.FC<ArchitectureGraphProps> = ({
                 return (
                   <div
                     key={edge.id}
-                    className={`flex items-center gap-2 text-[11px] font-mono px-3 py-1.5 rounded-xl transition-all duration-300 shadow-sm ${
+                    className={`circuit-edge-badge flex items-center gap-2 text-[11px] font-mono px-3 py-1.5 rounded-xl transition-all duration-300 shadow-sm ${
                       highlighted
                         ? 'bg-[#e00034] text-white border border-[#ff003c] font-black shadow-rb-red'
                         : 'bg-[#06142a] text-slate-300 border border-white/[0.1] hover:border-[#ffd100]'

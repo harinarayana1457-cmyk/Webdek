@@ -12,6 +12,8 @@ import {
   ShieldCheck,
   Lock
 } from 'lucide-react';
+import { animate, spring, stagger } from 'animejs';
+import { useAnimeScope } from '../hooks/useAnimeScope';
 import { AIConfigInfo } from '../../engine/types';
 
 interface AIContextInspectorProps {
@@ -21,15 +23,68 @@ interface AIContextInspectorProps {
 export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig }) => {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [activeRuleTab, setActiveRuleTab] = useState<'cursor' | 'claude'>('cursor');
+  const [displayScore, setDisplayScore] = useState(0);
+
+  const { root } = useAnimeScope(() => {
+    // 1. Numerical readiness counter
+    const scoreObj = { val: 0 };
+    animate(scoreObj, {
+      val: aiConfig.readinessScore,
+      duration: 1000,
+      ease: 'out(3)',
+      round: 1,
+      onUpdate: () => setDisplayScore(scoreObj.val)
+    });
+
+    // 2. Horsepower bar fill
+    animate('.readiness-bar-fill', {
+      width: ['0%', `${aiConfig.readinessScore}%`],
+      duration: 1100,
+      ease: 'out(4)'
+    });
+
+    // 3. Staggered MCP server cards
+    animate('.mcp-card', {
+      opacity: [0, 1],
+      translateY: [15, 0],
+      duration: 500,
+      delay: stagger(45),
+      ease: spring({ bounce: 0.35 })
+    });
+
+    // 4. Staggered environment keys
+    animate('.env-key-item', {
+      opacity: [0, 1],
+      translateX: [-10, 0],
+      duration: 400,
+      delay: stagger(25),
+      ease: 'out(3)'
+    });
+
+    // 5. Staggered recommendation alerts
+    animate('.rec-card', {
+      opacity: [0, 1],
+      scale: [0.94, 1],
+      duration: 500,
+      delay: stagger(60, { start: 200 }),
+      ease: spring({ bounce: 0.4 })
+    });
+  }, [aiConfig.readinessScore, aiConfig.mcpServers.length, aiConfig.environmentKeys.length]);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedKey(id);
     setTimeout(() => setCopiedKey(null), 2000);
+
+    animate(`#copy-${id}`, {
+      scale: [1, 1.25, 1],
+      duration: 350,
+      ease: spring({ bounce: 0.6 })
+    });
   };
 
   return (
-    <div className="p-4 lg:p-8 space-y-6 max-w-[1780px] mx-auto">
+    <div ref={root} className="p-4 lg:p-8 space-y-6 max-w-[1780px] mx-auto">
       {/* Top Pit Wall Hero Banner */}
       <div className="rb-widget p-6 lg:p-8 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 overflow-hidden">
         {/* Ambient Red Bull glow */}
@@ -57,7 +112,7 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                   : 'bg-[#ffd100] text-black border-[#ffb800]'
               }`}
             >
-              <span>{aiConfig.readinessScore}% RPM READINESS</span>
+              <span>{displayScore}% RPM READINESS</span>
             </span>
           </div>
 
@@ -71,17 +126,17 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
         <div className="w-full md:w-72 bg-[#040e1f] p-5 rounded-2xl border border-white/[0.1] shrink-0 z-10 shadow-inner">
           <div className="flex justify-between text-xs font-mono text-slate-300 mb-2">
             <span className="font-bold">Agent Horsepower</span>
-            <span className="font-black text-[#ffd100]">{aiConfig.readinessScore}%</span>
+            <span className="font-black text-[#ffd100]">{displayScore}%</span>
           </div>
 
           <div className="w-full h-2.5 bg-white/[0.1] rounded-full overflow-hidden mb-3.5">
             <div
-              className={`h-full transition-all duration-1000 ${
+              className={`readiness-bar-fill h-full ${
                 aiConfig.readinessScore >= 80
                   ? 'bg-gradient-to-r from-[#ffd100] to-[#e00034]'
                   : 'bg-gradient-to-r from-[#ffb800] to-[#ffd100]'
               }`}
-              style={{ width: `${aiConfig.readinessScore}%` }}
+              style={{ width: '0%' }}
             />
           </div>
 
@@ -123,7 +178,7 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                 {aiConfig.mcpServers.map((server, i) => (
                   <div
                     key={i}
-                    className="p-4 rounded-2xl bg-[#040e1f] border border-white/[0.08] space-y-2 hover:border-[#ffd100] transition-colors"
+                    className="mcp-card p-4 rounded-2xl bg-[#040e1f] border border-white/[0.08] space-y-2 hover:border-[#ffd100] transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-black text-[#ffd100] font-mono flex items-center gap-2">
@@ -182,13 +237,14 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                 {aiConfig.environmentKeys.map((key, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between p-3 rounded-2xl bg-[#040e1f] border border-white/[0.08] text-xs font-mono group hover:border-[#ffd100] transition-colors"
+                    className="env-key-item flex items-center justify-between p-3 rounded-2xl bg-[#040e1f] border border-white/[0.08] text-xs font-mono group hover:border-[#ffd100] transition-colors"
                   >
                     <div className="flex items-center gap-2.5 truncate">
                       <Lock className="w-3.5 h-3.5 text-[#ffd100] shrink-0" />
                       <span className="text-slate-200 font-bold truncate">{key}</span>
                     </div>
                     <button
+                      id={`copy-key-${i}`}
                       onClick={() => handleCopy(key, `key-${i}`)}
                       className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-white"
                       title="Copy variable name"
@@ -265,6 +321,7 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                 Active .cursorrules configuration:
               </span>
               <button
+                id="copy-cursor"
                 onClick={() => handleCopy(aiConfig.cursorRulesContent || '', 'cursor')}
                 className="flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-[#ffd100] bg-white/[0.08] hover:bg-white/[0.15] px-3 py-1.5 rounded-xl border border-white/[0.1] transition"
               >
@@ -290,6 +347,7 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
                 Active CLAUDE.md guidelines:
               </span>
               <button
+                id="copy-claude"
                 onClick={() => handleCopy(aiConfig.claudeInstructionsContent || '', 'claude')}
                 className="flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-[#ffd100] bg-white/[0.08] hover:bg-white/[0.15] px-3 py-1.5 rounded-xl border border-white/[0.1] transition"
               >
@@ -319,7 +377,7 @@ export const AIContextInspector: React.FC<AIContextInspectorProps> = ({ aiConfig
             {aiConfig.recommendations.map((rec, idx) => (
               <div
                 key={idx}
-                className="text-xs text-slate-200 flex items-start gap-3 bg-[#040e1f] p-4 rounded-2xl border border-white/[0.08] shadow-sm font-medium"
+                className="rec-card text-xs text-slate-200 flex items-start gap-3 bg-[#040e1f] p-4 rounded-2xl border border-white/[0.08] shadow-sm font-medium"
               >
                 <span className="w-2 h-2 rounded-full bg-[#e00034] shrink-0 mt-1 shadow-rb-red" />
                 <span className="leading-relaxed">{rec}</span>

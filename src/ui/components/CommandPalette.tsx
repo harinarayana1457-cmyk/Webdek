@@ -10,6 +10,8 @@ import {
   Tag,
   Zap
 } from 'lucide-react';
+import { animate, spring, stagger } from 'animejs';
+import { useAnimeScope } from '../hooks/useAnimeScope';
 import { ProjectAnalysisResult } from '../../engine/types';
 
 interface CommandPaletteProps {
@@ -31,6 +33,28 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 }) => {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { root } = useAnimeScope(() => {
+    if (!isOpen) return;
+
+    // 1. Spring modal tray entrance
+    animate('.command-palette-card', {
+      scale: [0.93, 1],
+      opacity: [0, 1],
+      translateY: [-16, 0],
+      duration: 450,
+      ease: spring({ bounce: 0.35 })
+    });
+
+    // 2. Staggered search results
+    animate('.palette-item', {
+      opacity: [0, 1],
+      translateX: [-8, 0],
+      duration: 300,
+      delay: stagger(20),
+      ease: 'out(3)'
+    });
+  }, [isOpen, query]);
 
   useEffect(() => {
     if (isOpen) {
@@ -74,8 +98,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     .slice(0, 5);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-[#091c38] rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[80vh] relative">
+    <div ref={root} className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="command-palette-card w-full max-w-2xl bg-[#091c38] rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[80vh] relative">
         {/* Top Racing Accent Stripe */}
         <div className="h-1 w-full bg-gradient-to-r from-[#e00034] via-[#ffd100] to-transparent" />
 
@@ -123,7 +147,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     if (onSelectNode) onSelectNode(node.id);
                     onClose();
                   }}
-                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#0e2447] cursor-pointer border border-transparent hover:border-[#e00034]/50 transition group"
+                  className="palette-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[#0e2447] cursor-pointer border border-transparent hover:border-[#e00034]/50 transition group"
                 >
                   <div className="flex items-center gap-2.5 truncate">
                     <div className="w-7 h-7 rounded-lg bg-[#e00034]/20 border border-[#e00034]/40 text-[#ffd100] flex items-center justify-center font-bold text-[11px] shrink-0 font-mono">
@@ -162,7 +186,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     if (onSelectStackItem) onSelectStackItem(dep.name);
                     onClose();
                   }}
-                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#0e2447] cursor-pointer border border-transparent hover:border-[#ffd100]/50 transition group"
+                  className="palette-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[#0e2447] cursor-pointer border border-transparent hover:border-[#ffd100]/50 transition group"
                 >
                   <div className="flex items-center gap-2.5 truncate">
                     <div className="w-7 h-7 rounded-lg bg-[#ffd100]/15 border border-[#ffd100]/30 text-[#ffd100] flex items-center justify-center font-bold text-[11px] shrink-0">
@@ -205,7 +229,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     onNavigateTab('files');
                     onClose();
                   }}
-                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#0e2447] cursor-pointer border border-transparent hover:border-sky-500/40 transition group font-mono"
+                  className="palette-item flex items-center justify-between p-2.5 rounded-xl hover:bg-[#0e2447] cursor-pointer border border-transparent hover:border-sky-500/40 transition group font-mono"
                 >
                   <div className="flex items-center gap-2 truncate text-slate-300 group-hover:text-sky-300">
                     <FileCode className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-400" />
